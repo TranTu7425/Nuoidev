@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Transaction {
+  id             String    @id @default(cuid())
+  transactionId  String    @unique @map("transaction_id") // Mã giao dịch từ ngân hàng
+  amount         Decimal   @db.Decimal(15, 2)
+  senderName     String    @map("sender_name")
+  senderAccount  String?   @map("sender_account") // Có thể null nếu không có
+  message        String?   @db.Text
+  status         String    @default("pending") // pending, verified, rejected
+  verifiedAt     DateTime? @map("verified_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  @@map("transactions")
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Donor {
+  id                String    @id @default(cuid())
+  name              String
+  totalAmount       Decimal   @default(0) @map("total_amount") @db.Decimal(15, 2)
+  transactionCount Int       @default(0) @map("transaction_count")
+  firstDonationAt  DateTime? @map("first_donation_at")
+  lastDonationAt   DateTime? @map("last_donation_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  @@map("donors")
+  @@index([totalAmount])
+  @@index([lastDonationAt])
+}
+
