@@ -1,172 +1,56 @@
-# Hướng dẫn cấu hình Webhook
+# Hướng dẫn cấu hình Webhook (SePay.vn)
 
 ## Tổng quan
 
-Webhook endpoint nhận thông báo giao dịch từ ngân hàng/API banking và tự động cập nhật vào database.
+Dự án đã được tích hợp sẵn để nhận thông báo giao dịch tự động từ **SePay.vn**. Khi có người quét mã QR và chuyển khoản thành công, SePay sẽ gửi tín hiệu về website của bạn để hiển thị sao kê tức thì.
 
-## Endpoint
+## Các bước cấu hình trên SePay.vn
 
-**URL**: `POST /api/webhook`
+1.  **Đăng ký & Kết nối**: Đăng ký tài khoản trên [SePay.vn](https://sepay.vn) và kết nối với tài khoản ngân hàng BIDV của bạn.
+2.  **Tạo Webhook**: 
+    *   Vào mục **Cấu hình Webhook** trên SePay.
+    *   Nhấn **Thêm Webhook mới**.
+    *   **URL nhận Webhook**: `https://ten-mien-cua-ban.com/api/webhook` (Thay bằng domain thực tế của bạn).
+    *   **Kiểu xác thực**: Chọn `API Key (Bearer Token)`.
+    *   **API Key**: Copy mã API Key mà SePay cung cấp.
 
-## Bảo mật
+## Cấu hình trên Website (File .env)
 
-### 1. Signature Verification
+Mở file `.env` và cập nhật thông tin:
 
-Webhook sử dụng HMAC SHA256 để xác thực request. Header cần gửi kèm:
+```env
+# Dán API Key từ SePay vào đây
+WEBHOOK_SECRET="MÃ_API_KEY_TU_SEPAY"
 
-- `x-webhook-signature` hoặc `x-signature`: Signature được tính từ payload và secret key
-
-**Cách tính signature (Node.js):**
-```javascript
-const crypto = require('crypto');
-const secret = 'your-webhook-secret';
-const payload = JSON.stringify(requestBody);
-const signature = crypto
-  .createHmac('sha256', secret)
-  .update(payload)
-  .digest('hex');
-```
-
-### 2. IP Whitelist
-
-Cấu hình IP whitelist trong file `.env`:
-
-```
-WEBHOOK_ALLOWED_IPS="192.168.1.100,203.0.113.0"
-```
-
-Nếu để trống, sẽ chấp nhận tất cả IP (không khuyến khích cho production).
-
-### 3. Rate Limiting
-
-Mặc định: 10 requests/phút cho mỗi IP.
-
-## Payload Format
-
-### Request Body (JSON)
-
-```json
-{
-  "transaction_id": "TXN123456789",
-  "amount": 100000,
-  "sender_name": "Nguyễn Văn A",
-  "sender_account": "1234567890",
-  "message": "Ủng hộ developer",
-  "timestamp": "2024-01-01T00:00:00Z"
-}
-```
-
-### Fields
-
-- `transaction_id` (required, string): Mã giao dịch duy nhất từ ngân hàng
-- `amount` (required, number): Số tiền (VND)
-- `sender_name` (required, string): Tên người chuyển
-- `sender_account` (optional, string): Số tài khoản người chuyển
-- `message` (optional, string): Nội dung chuyển khoản
-- `timestamp` (optional, string/date): Thời gian giao dịch (ISO 8601)
-
-### Response
-
-**Success (201):**
-```json
-{
-  "message": "Transaction received",
-  "transactionId": "clx...",
-  "status": "verified"
-}
-```
-
-**Error (400/401/403/429/500):**
-```json
-{
-  "error": "Error message"
-}
-```
-
-## Auto Verification
-
-Cấu hình tự động xác minh giao dịch trong file `.env`:
-
-```
+# Tự động xác minh giao dịch (Nên để true để hiện lên website ngay)
 AUTO_VERIFY_TRANSACTIONS=true
 ```
 
-- `true`: Giao dịch sẽ tự động được đánh dấu là `verified` ngay khi nhận được
-- `false`: Giao dịch sẽ ở trạng thái `pending`, cần xác minh thủ công
+## Cách thức hoạt động
 
-## Testing
+1.  **Xác thực**: Website sẽ kiểm tra header `Authorization: Bearer <WEBHOOK_SECRET>` từ SePay gửi tới.
+2.  **Xử lý**: Hệ thống tự động chuyển đổi dữ liệu từ SePay (số tiền, nội dung, mã giao dịch) sang định dạng của website.
+3.  **Real-time**: Ngay khi SePay gửi tín hiệu, website sẽ lưu vào database và thông báo tới trang "Check Logs Realtime" mà không cần load lại trang.
 
-### Sử dụng cURL
-
-```bash
-curl -X POST http://localhost:3000/api/webhook \
-  -H "Content-Type: application/json" \
-  -H "x-webhook-signature: YOUR_SIGNATURE" \
-  -d '{
-    "transaction_id": "TEST123",
-    "amount": 50000,
-    "sender_name": "Test User",
-    "sender_account": "1234567890",
-    "message": "Test donation"
-  }'
-```
-
-### Sử dụng Postman
-
-1. Method: POST
-2. URL: `http://localhost:3000/api/webhook`
-3. Headers:
-   - `Content-Type: application/json`
-   - `x-webhook-signature: YOUR_SIGNATURE`
-4. Body (raw JSON):
-```json
-{
-  "transaction_id": "TEST123",
-  "amount": 50000,
-  "sender_name": "Test User",
-  "message": "Test donation"
-}
-```
-
-## Xử lý lỗi
-
-### Transaction đã tồn tại
-
-Nếu `transaction_id` đã tồn tại trong database, API sẽ trả về status 200 với thông báo:
+## Payload mẫu từ SePay (Hệ thống đã hỗ trợ)
 
 ```json
 {
-  "message": "Transaction already exists",
-  "transactionId": "existing-id"
+  "id": 123456,
+  "gateway": "BIDV",
+  "transactionDate": "2024-01-01 10:00:00",
+  "accountNumber": "3711007752",
+  "content": "ND12345 TRAN ANH TU UNG HO",
+  "transferType": "in",
+  "transferAmount": 50000,
+  "referenceCode": "BIDV.12345.6789",
+  "description": "Chuyen tien den TRAN ANH TU..."
 }
 ```
 
-### Invalid Signature
+## Kiểm tra thử (Test)
 
-Nếu signature không hợp lệ, API trả về 401:
+Bạn có thể dùng tính năng **"Gửi thử"** trên giao diện Webhook của SePay để kiểm tra xem dữ liệu có đổ về website hay không. 
 
-```json
-{
-  "error": "Invalid signature"
-}
-```
-
-### Rate Limit Exceeded
-
-Nếu vượt quá rate limit, API trả về 429:
-
-```json
-{
-  "error": "Rate limit exceeded"
-}
-```
-
-## Production Checklist
-
-- [ ] Đặt `WEBHOOK_SECRET` mạnh và bảo mật
-- [ ] Cấu hình IP whitelist chính xác
-- [ ] Kiểm tra HTTPS được bật
-- [ ] Test với dữ liệu thực từ ngân hàng
-- [ ] Monitor logs để phát hiện lỗi
-- [ ] Setup alert cho failed webhooks
-
+---
+*Lưu ý: Đảm bảo website của bạn đã được deploy lên môi trường có HTTPS để SePay có thể gửi dữ liệu thành công.*

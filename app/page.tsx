@@ -337,22 +337,23 @@ export default function Home() {
 
             {/* Right Side: QR Code */}
             <div className="flex justify-center lg:justify-end">
-              <motion.div 
-                whileHover={{ scale: 1.05, rotate: 2 }}
-                className="relative p-6 bg-white rounded-[3rem] shadow-2xl shadow-blue-500/40 border-8 border-white/20"
-              >
-                <div className="relative w-72 h-72 md:w-80 md:h-80 overflow-hidden rounded-2xl">
-                  <Image 
-                    src="/images/qr-code.jpg" 
-                    alt="QR Banking TRAN ANH TU" 
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-8 py-3 rounded-full font-black text-sm uppercase tracking-widest whitespace-nowrap shadow-xl">
-                  Quét để Merge cà phê ☕️
-                </div>
-              </motion.div>
+                <motion.div 
+                  whileHover={{ scale: 1.05, rotate: 2 }}
+                  className="relative p-6 bg-white rounded-[3rem] shadow-2xl shadow-blue-500/40 border-8 border-white/20"
+                >
+                  <div className="relative w-72 h-72 md:w-80 md:h-80 overflow-hidden rounded-2xl">
+                    <Image 
+                      src="https://qr.sepay.vn/img?acc=96247RDFO9&bank=BIDV" 
+                      alt="QR Banking TRAN ANH TU" 
+                      fill
+                      unoptimized
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-8 py-3 rounded-full font-black text-sm uppercase tracking-widest whitespace-nowrap shadow-xl">
+                    Quét để Merge cà phê ☕️
+                  </div>
+                </motion.div>
             </div>
           </div>
         </div>

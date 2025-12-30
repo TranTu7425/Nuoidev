@@ -45,15 +45,35 @@ export async function POST(request: NextRequest) {
 
     // Get raw body for signature verification
     const body = await request.text()
-    const signature = request.headers.get('x-webhook-signature') || 
-                     request.headers.get('x-signature') ||
-                     null
-
-    // Verify signature
+    
+    // Auth check (Support both HMAC signature and SePay Bearer Token)
     const secret = process.env.WEBHOOK_SECRET
-    if (secret && !verifyWebhookSignature(body, signature, secret)) {
+    const signature = request.headers.get('x-webhook-signature') || 
+                     request.headers.get('x-signature')
+    const authHeader = request.headers.get('authorization')
+
+    console.log('--- 🛡️ AUTH DEBUG ---')
+    console.log('Secret in .env:', secret ? 'EXISTS' : 'NOT FOUND')
+    console.log('Authorization Header:', authHeader)
+    console.log('Signature Header:', signature)
+
+    let isAuthorized = !secret // If no secret set, allow all
+
+    if (secret) {
+      if (signature) {
+        isAuthorized = verifyWebhookSignature(body, signature, secret)
+        console.log('HMAC Auth Result:', isAuthorized)
+      } else if (authHeader && authHeader.startsWith('Bearer ')) {
+        const token = authHeader.substring(7)
+        isAuthorized = token === secret
+        console.log('Bearer Token Auth Result:', isAuthorized)
+      }
+    }
+
+    if (!isAuthorized) {
+      console.error('❌ AUTH FAILED: Secret mismatch or missing auth header')
       return NextResponse.json(
-        { error: 'Invalid signature' },
+        { error: 'Unauthorized' },
         { status: 401 }
       )
     }
@@ -69,7 +89,34 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const payload = parseWebhookPayload(data)
+    const rawPayload = parseWebhookPayload(data)
+    
+    // Hàm hỗ trợ trích xuất tên từ nội dung chuyển khoản
+    const extractName = (content: string): string | null => {
+      if (!content) return null
+      // Tìm cụm từ có 2-4 từ viết hoa liên tiếp (pattern phổ biến của tên người trong ngân hàng)
+      const match = content.match(/[A-Z]{2,}(?:\s[A-Z]{2,}){1,3}/)
+      return match ? match[0] : null
+    }
+
+    const message = rawPayload.content || rawPayload.message || rawPayload.description || ''
+    const extractedName = extractName(message)
+
+    // Normalize SePay payload to our internal format
+    const payload = {
+      transaction_id: (rawPayload.id?.toString() || rawPayload.transaction_id || rawPayload.referenceCode || '').toString(),
+      amount: rawPayload.transferAmount || rawPayload.amount || 0,
+      sender_name: rawPayload.sender_name || extractedName || 'Nhà hảo tâm',
+      sender_account: rawPayload.accountNumber || rawPayload.sender_account || null,
+      message: message || null,
+    }
+
+    if (!payload.transaction_id || payload.amount <= 0) {
+      return NextResponse.json(
+        { error: 'Invalid payload: missing transaction_id or amount' },
+        { status: 400 }
+      )
+    }
 
     // Check if transaction already exists
     const existing = await prisma.transaction.findUnique({
@@ -138,7 +185,12 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     )
   } catch (error) {
-    console.error('Webhook error:', error)
+    console.error('❌ WEBHOOK ERROR DETAIL:', error)
+    
+    if (error instanceof Error) {
+      console.error('Message:', error.message)
+      console.error('Stack:', error.stack)
+    }
     
     if (error instanceof Error && error.name === 'ZodError') {
       return NextResponse.json(
