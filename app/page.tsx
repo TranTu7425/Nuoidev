@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import StatsDashboard from '@/components/StatsDashboard'
-import { ArrowRight, ShieldCheck, Zap, Heart, Copy, Check, X, Star, Info, MessageCircle, AlertCircle, Code, Coffee, Cpu, Terminal } from 'lucide-react'
+import { ArrowRight, ShieldCheck, Zap, Heart, Copy, Check, X, Star, Info, MessageCircle, AlertCircle, Code, Coffee, Cpu, Terminal, Activity, History, Target, LockOpen, Rocket, HardDrive, XCircle, CheckCircle2, Laptop, Package, Receipt, Video, Bug, MessageSquare, Settings, BarChart3, Mic2, MonitorOff, Keyboard, Wrench } from 'lucide-react'
 import { useState } from 'react'
 
 export default function Home() {
@@ -34,7 +34,7 @@ export default function Home() {
               animate={{ opacity: 1, scale: 1 }}
               className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 font-black text-lg border-2 border-emerald-500/20 shadow-xl shadow-emerald-500/10 animate-bounce cursor-pointer hover:bg-emerald-100 dark:hover:bg-emerald-800 transition-colors"
             >
-              NUÔI DEV NGAY 🌱
+              NUÔI DEV NGAY
             </motion.a>
 
             <motion.h1
@@ -52,7 +52,7 @@ export default function Home() {
               transition={{ delay: 0.2 }}
               className="max-w-2xl mx-auto text-2xl font-bold text-slate-600 dark:text-slate-300 italic"
             >
-              "Code chạy bằng cà phê, sao kê chạy bằng Webhook!" ☕️
+              "Code chạy bằng cà phê, sao kê chạy bằng Webhook!"
             </motion.p>
 
             <motion.div
@@ -65,13 +65,13 @@ export default function Home() {
                 href="/transactions"
                 className="px-10 py-5 bg-blue-600 text-white rounded-3xl font-black text-xl shadow-2xl shadow-blue-500/40 hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
               >
-                📊 Check Logs Realtime
+                <Activity size={24} /> Check Logs Realtime
               </Link>
               <Link
                 href="/donors"
                 className="px-10 py-5 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-3xl font-black text-xl shadow-xl border-4 border-slate-100 dark:border-slate-700 hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
               >
-                💰 Lịch Sử Pull Request
+                <History size={24} /> Lịch Sử Pull Request
               </Link>
             </motion.div>
           </div>
@@ -82,7 +82,9 @@ export default function Home() {
       <section className="py-24 bg-slate-50/50 dark:bg-slate-900/20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16 space-y-4">
-            <h2 className="text-5xl font-black tracking-tight uppercase">🎯 TẠI SAO NÊN NUÔI DEV?</h2>
+            <h2 className="text-5xl font-black tracking-tight uppercase flex items-center justify-center gap-4">
+              <Target size={48} className="text-blue-600" /> TẠI SAO NÊN NUÔI DEV?
+            </h2>
             <p className="text-slate-500 font-bold uppercase tracking-widest">Nếu không nuôi, Dev sẽ tự sinh Bug để giải trí!</p>
           </div>
 
@@ -91,34 +93,34 @@ export default function Home() {
               { 
                 title: "Webhook Sao Kê", 
                 desc: "Cập nhật từng giây qua API! Nhanh hơn cả tốc độ Build của Next.js!",
-                icon: "⚡️",
-                color: "blue"
+                icon: Zap,
+                color: "text-blue-500"
               },
               { 
                 title: "Open Source Chi Tiêu", 
                 desc: "Minh bạch 1000%! Báo cáo từ ly cà phê Highland đến gói mì tôm Hảo Hảo!",
-                icon: "🔓",
-                color: "emerald"
+                icon: LockOpen,
+                color: "text-emerald-500"
               },
               { 
                 title: "Optimize Resource", 
                 desc: "Tiền donate chỉ dùng để mua RAM, cà phê và phở. Tuyệt đối không có Bug!",
-                icon: "🚀",
-                color: "orange"
+                icon: Rocket,
+                color: "text-orange-500"
               },
               { 
                 title: "Support 24/7", 
                 desc: "Hỏi Dev ăn gì, fix bug ra sao bất cứ lúc nào (trừ lúc đang họp Daily Standup!)",
-                icon: "💬",
-                color: "purple"
+                icon: MessageCircle,
+                color: "text-purple-500"
               }
             ].map((f, i) => (
               <motion.div 
                 key={i}
                 whileHover={{ y: -10 }}
-                className="glass-card p-8 rounded-[2.5rem] border-2 border-transparent hover:border-blue-500/20 transition-all text-center space-y-4"
+                className="glass-card p-8 rounded-[2.5rem] border-2 border-transparent hover:border-blue-500/20 transition-all text-center space-y-4 flex flex-col items-center"
               >
-                <div className="text-5xl">{f.icon}</div>
+                <f.icon size={48} className={f.color} />
                 <h3 className="text-xl font-black uppercase tracking-tighter">{f.title}</h3>
                 <p className="text-slate-500 font-medium text-sm leading-relaxed">{f.desc}</p>
               </motion.div>
@@ -133,7 +135,9 @@ export default function Home() {
       <section className="py-32 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-6xl font-black tracking-tighter mb-4 uppercase">💾 SO SÁNH VỚI "PROJECT KHÁC"</h2>
+            <h2 className="text-6xl font-black tracking-tighter mb-4 uppercase flex items-center justify-center gap-4">
+              <HardDrive size={54} className="text-slate-400" /> SO SÁNH VỚI "PROJECT KHÁC"
+            </h2>
             <div className="h-2 w-24 bg-blue-600 mx-auto rounded-full" />
           </div>
 
@@ -157,7 +161,7 @@ export default function Home() {
                   "Block người hỏi vì \"It works on my machine\""
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-4 text-xl font-bold text-slate-400">
-                    <span className="text-2xl mt-1">❌</span> {item}
+                    <XCircle className="text-red-500 mt-1 flex-shrink-0" size={24} /> {item}
                   </li>
                 ))}
               </ul>
@@ -185,7 +189,7 @@ export default function Home() {
                   "Mở Issue công khai, trả lời nhanh hơn ChatGPT"
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-4 text-xl font-bold">
-                    <span className="text-2xl mt-1">✅</span> {item}
+                    <CheckCircle2 className="text-white mt-1 flex-shrink-0" size={24} /> {item}
                   </li>
                 ))}
               </ul>
@@ -201,18 +205,20 @@ export default function Home() {
             {/* Cam Kết Của Dev */}
             <div className="space-y-12">
               <div className="space-y-4">
-                <h2 className="text-5xl font-black tracking-tight uppercase">👨‍💻 CAM KẾT VÀNG CỦA DEV:</h2>
+                <h2 className="text-5xl font-black tracking-tight uppercase flex items-center gap-4">
+                  <Laptop size={48} className="text-amber-500" /> CAM KẾT VÀNG CỦA DEV:
+                </h2>
                 <div className="h-1 w-20 bg-amber-500 rounded-full" />
               </div>
               
               <div className="space-y-8">
                 {[
-                  { icon: "☕️", text: "Commit sao kê mỗi ngày: Push lúc 9h sáng, No Conflict! (Kể cả Lễ, Tết)" },
-                  { icon: "📦", text: "Full Transparency: Từ License phần mềm đến tô phở 25k đều được log lại!" },
-                  { icon: "🧾", text: "Bill chính chủ: Chụp hình, Scan, lưu trên Cloud vĩnh viễn!" },
-                  { icon: "🎥", text: "Live Debug Spending: Mở ví tiền, đếm mì tôm livestream cho anh chị xem!" },
-                  { icon: "👾", text: "Zero Dark Patterns: Không giấu giếm, không thu phí ngầm, không phí duy trì!" },
-                  { icon: "💬", text: "Hỗ trợ đa luồng: Hỏi khó đến mấy cũng trả lời bằng kiến thức Computer Science!" }
+                  { icon: Coffee, text: "Commit sao kê mỗi ngày: Push lúc 9h sáng, No Conflict! (Kể cả Lễ, Tết)", color: "text-orange-500" },
+                  { icon: Package, text: "Full Transparency: Từ License phần mềm đến tô phở 25k đều được log lại!", color: "text-blue-500" },
+                  { icon: Receipt, text: "Bill chính chủ: Chụp hình, Scan, lưu trên Cloud vĩnh viễn!", color: "text-emerald-500" },
+                  { icon: Video, text: "Live Debug Spending: Mở ví tiền, đếm mì tôm livestream cho anh chị xem!", color: "text-purple-500" },
+                  { icon: Bug, text: "Zero Dark Patterns: Không giấu giếm, không thu phí ngầm, không phí duy trì!", color: "text-red-500" },
+                  { icon: MessageSquare, text: "Hỗ trợ đa luồng: Hỏi khó đến mấy cũng trả lời bằng kiến thức Computer Science!", color: "text-indigo-500" }
                 ].map((c, i) => (
                   <motion.div 
                     key={i} 
@@ -221,7 +227,7 @@ export default function Home() {
                     transition={{ delay: i * 0.1 }}
                     className="flex gap-4 items-center bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700"
                   >
-                    <span className="text-3xl">{c.icon}</span>
+                    <c.icon size={32} className={c.color} />
                     <span className="font-bold text-slate-600 dark:text-slate-300">{c.text}</span>
                   </motion.div>
                 ))}
@@ -231,7 +237,9 @@ export default function Home() {
             {/* Resource Allocation */}
             <div className="space-y-12">
               <div className="space-y-4">
-                <h2 className="text-5xl font-black tracking-tight uppercase">⚙️ ALLOCATE RESOURCE VÀO ĐÂU?</h2>
+                <h2 className="text-5xl font-black tracking-tight uppercase flex items-center gap-4">
+                  <Settings size={48} className="text-blue-600" /> ALLOCATE RESOURCE VÀO ĐÂU?
+                </h2>
                 <div className="h-1 w-20 bg-blue-600 rounded-full" />
               </div>
 
@@ -259,7 +267,9 @@ export default function Home() {
                     </div>
                   </div>
                 ))}
-                <p className="text-xs font-bold text-slate-400 italic pt-4">📊 Dashboard chi tiết cập nhật hàng ngày trên website!</p>
+                <p className="text-xs font-bold text-slate-400 italic pt-4 flex items-center gap-2">
+                  <BarChart3 size={14} /> Dashboard chi tiết cập nhật hàng ngày trên website!
+                </p>
               </div>
             </div>
           </div>
@@ -273,15 +283,17 @@ export default function Home() {
             <Code size={48} strokeWidth={3} />
           </div>
           <div className="space-y-6">
-            <h2 className="text-5xl font-black tracking-tight uppercase tracking-widest">🎤 TÂM THƯ CỦA DEV</h2>
+            <h2 className="text-5xl font-black tracking-tight uppercase tracking-widest flex items-center justify-center gap-4">
+              <Mic2 size={48} /> TÂM THƯ CỦA DEV
+            </h2>
             <p className="text-2xl font-bold text-slate-600 dark:text-slate-300 leading-relaxed italic">
               "Trong thế giới mà Bug nhiều hơn tính năng, Tôi xin cam kết: HÃY NUÔI DEV!"
             </p>
-            <p className="text-lg font-medium text-slate-500 leading-relaxed">
-              Dev nghèo, Dev cần cà phê để thức đêm, nhưng Dev KHÔNG BAO GIỜ gian lận Logic! Mỗi đồng các bạn gửi, Dev sẽ Optimize Resource đến mức tối đa! 😭
+            <p className="text-lg font-medium text-slate-500 leading-relaxed flex items-center justify-center gap-2">
+              Dev nghèo, Dev cần cà phê để thức đêm, nhưng Dev KHÔNG BAO GIỜ gian lận Logic! Mỗi đồng các bạn gửi, Dev sẽ Optimize Resource đến mức tối đa! <Heart size={18} className="text-red-500 inline" />
             </p>
-            <p className="text-sm font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest">
-              P/S: Hứa không mua Macbook Pro M4 bằng tiền donate này đâu (Trừ khi anh chị bảo mua!) 💻❌
+            <p className="text-sm font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest flex items-center justify-center gap-2">
+              P/S: Hứa không mua Macbook Pro M4 bằng tiền donate này đâu (Trừ khi anh chị bảo mua!) <MonitorOff size={16} />
             </p>
           </div>
         </div>
@@ -292,8 +304,12 @@ export default function Home() {
         <div className="absolute inset-0 bg-blue-600/10 -z-10" />
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-16 space-y-4">
-            <h2 className="text-5xl font-black tracking-tighter uppercase">⌨️ PUSH CODE, GET CƠM!</h2>
-            <p className="text-slate-400 font-bold tracking-widest uppercase">Quét mã dưới đây để Inject thêm cà phê vào hệ thống! ☕️</p>
+            <h2 className="text-5xl font-black tracking-tighter uppercase flex items-center justify-center gap-4">
+              <Keyboard size={48} /> PUSH CODE, GET CƠM!
+            </h2>
+            <p className="text-slate-400 font-bold tracking-widest uppercase flex items-center justify-center gap-2">
+              Quét mã dưới đây để Inject thêm cà phê vào hệ thống! <Coffee size={20} className="text-blue-400" />
+            </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -331,7 +347,7 @@ export default function Home() {
                 whileTap={{ scale: 0.95 }}
                 className="w-full py-6 bg-white text-slate-900 rounded-[2rem] font-black text-2xl shadow-2xl shadow-white/10 flex items-center justify-center gap-3"
               >
-                🛠 TÔI MUỐN MAINTAIN BẠN!
+                <Wrench size={28} /> TÔI MUỐN MAINTAIN BẠN!
               </motion.button>
             </div>
 
@@ -350,8 +366,8 @@ export default function Home() {
                       className="object-cover"
                     />
                   </div>
-                  <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-8 py-3 rounded-full font-black text-sm uppercase tracking-widest whitespace-nowrap shadow-xl">
-                    Quét để Merge cà phê ☕️
+                  <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-8 py-3 rounded-full font-black text-sm uppercase tracking-widest whitespace-nowrap shadow-xl flex items-center gap-2">
+                    Quét để Merge cà phê <Coffee size={16} />
                   </div>
                 </motion.div>
             </div>
@@ -363,7 +379,7 @@ export default function Home() {
       <section className="py-12 border-t border-slate-100 dark:border-slate-800">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <div className="flex items-center justify-center gap-2 text-slate-400 font-bold text-xs uppercase tracking-widest mb-2">
-            <AlertCircle size={14} /> ⚠️ SYSTEM WARNING
+            <AlertCircle size={14} className="text-amber-500" /> SYSTEM WARNING
           </div>
           <p className="text-slate-400 text-[10px] font-medium leading-relaxed uppercase tracking-widest">
             Trang web này mang tính chất giải trí cao (High Availability Humor). Mọi nội dung cợt nhả không nhằm mục đích xúc phạm bất kỳ ai. 
