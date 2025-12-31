@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { AlertOctagon, Ghost, Trash2, ZapOff } from 'lucide-react'
+import { AlertOctagon, Ghost, Trash2, ZapOff, RefreshCcw, X } from 'lucide-react'
 import { playSound } from '@/lib/sounds'
+import Image from 'next/image'
 
 export default function ForbiddenButton() {
   const [clickCount, setClickCount] = useState(0)
@@ -44,14 +45,13 @@ export default function ForbiddenButton() {
       
       // Kích hoạt rung lắc toàn trang
       window.dispatchEvent(new CustomEvent('chaos-mode', { detail: { active: true } }))
-      
-      setTimeout(() => {
-        // 3. Reset hệ thống
-        setIsDying(false)
-        setClickCount(0)
-        window.dispatchEvent(new CustomEvent('chaos-mode', { detail: { active: false } }))
-      }, 5000)
     }, 5000)
+  }
+
+  const handleReset = () => {
+    setIsDying(false)
+    setClickCount(0)
+    window.dispatchEvent(new CustomEvent('chaos-mode', { detail: { active: false } }))
   }
 
   return (
@@ -79,14 +79,54 @@ export default function ForbiddenButton() {
         {isDying && (
           <motion.div
             initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 2 }}
+            animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 flex items-center justify-center bg-red-600/90 text-white z-[350] pointer-events-none"
+            className="fixed inset-0 flex items-center justify-center bg-red-600/95 text-white z-[350]"
           >
-            <div className="text-center p-10">
-              <ZapOff size={120} className="mx-auto mb-6 animate-bounce" />
-              <h1 className="text-6xl font-black mb-4 uppercase">Critical Error</h1>
-              <p className="text-2xl font-bold italic">"Lỗi hệ thống: Thiếu cà phê để xử lý sự lì lợm!"</p>
+            <div className="text-center p-6 max-w-md w-full space-y-8">
+              <div className="space-y-4">
+                <ZapOff size={80} className="mx-auto animate-bounce text-yellow-300" />
+                <h1 className="text-5xl font-black uppercase tracking-tighter">Critical Error</h1>
+                <p className="text-xl font-bold italic opacity-90">
+                  "Hệ thống đã sụp đổ hoàn toàn vì sự lì lợm của bạn. Vui lòng nạp cà phê để khôi phục!"
+                </p>
+              </div>
+
+              {/* QR Code khều donate */}
+              <motion.div 
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                className="bg-white p-4 rounded-[2rem] shadow-2xl inline-block"
+              >
+                <div className="relative w-48 h-48 mx-auto overflow-hidden rounded-xl">
+                  <Image 
+                    src="https://qr.sepay.vn/img?acc=96247RDFO9&bank=BIDV" 
+                    alt="Khôi phục hệ thống" 
+                    fill
+                    unoptimized
+                    className="object-cover"
+                  />
+                </div>
+                <p className="text-slate-900 font-black text-xs mt-3 uppercase tracking-widest">
+                  Quét để Inject Cà Phê ☕️
+                </p>
+              </motion.div>
+
+              <div className="flex flex-col gap-4">
+                <button
+                  onClick={handleReset}
+                  className="w-full py-4 bg-white text-red-600 rounded-2xl font-black text-lg shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
+                >
+                  <RefreshCcw size={20} /> Tôi sẽ nạp cà phê ngay!
+                </button>
+                <button
+                  onClick={handleReset}
+                  className="w-full py-3 bg-red-700/50 hover:bg-red-800 text-white/80 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 border border-red-500/30"
+                >
+                  <X size={16} /> Không đấy lêu lêu :P
+                </button>
+              </div>
             </div>
           </motion.div>
         )}

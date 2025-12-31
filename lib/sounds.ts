@@ -3,8 +3,8 @@
 const SOUNDS = {
   // Sử dụng các link nội bộ hoặc CDN tin cậy
   SUCCESS: '/sounds/cash.MP3', // Cash register sound
-  CLICK: 'https://cdn.pixabay.com/audio/2022/03/15/audio_731478149e.mp3',   // Click
-  ALERT: 'https://cdn.pixabay.com/audio/2021/08/04/audio_0625c1539c.mp3',   // Alert/Siren
+  CLICK: '#',   // Click
+  ALERT: '#',   // Alert/Siren
   EXPLOSION: '/sounds/flashbang.MP3', // Flashbang effect
 }
 
