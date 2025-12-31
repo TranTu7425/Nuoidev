@@ -109,7 +109,7 @@ export default function TransactionNotification() {
               <div className="flex-grow space-y-1">
                 <div className="flex justify-between items-start">
                   <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
-                    Giao dịch mới thành công
+                    Cảm ơn nhà hảo tâm!
                   </p>
                   <button 
                     onClick={() => removeNotification(tx.id)}

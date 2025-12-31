@@ -29,7 +29,7 @@ export default function DonorWall() {
 
   async function fetchDonors() {
     try {
-      const res = await fetch('/api/stats')
+      const res = await fetch('/api/stats?limit=50')
       const data = await res.json()
       let sortedDonors = [...(data.topDonors || [])]
       if (sortBy === 'time') {

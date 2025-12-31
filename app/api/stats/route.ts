@@ -1,9 +1,11 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { startOfDay, startOfMonth } from 'date-fns'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url)
+    const limit = parseInt(searchParams.get('limit') || '5')
     const now = new Date()
     const todayStart = startOfDay(now)
     const monthStart = startOfMonth(now)
@@ -12,7 +14,7 @@ export async function GET() {
     const verifiedTransactions = await prisma.transaction.findMany({
       where: { status: 'verified' },
       orderBy: { createdAt: 'desc' },
-      take: 10,
+      take: limit,
     })
 
     // 1. Lúa về hôm nay
@@ -43,7 +45,7 @@ export async function GET() {
     // Top donors
     const topDonors = await prisma.donor.findMany({
       orderBy: { totalAmount: 'desc' },
-      take: 10,
+      take: limit,
     })
 
     const totalDonors = await prisma.donor.count({

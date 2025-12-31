@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { formatCurrency, formatDateShort } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Wallet, Users, ArrowUpRight, TrendingUp, Clock, Award } from 'lucide-react'
@@ -127,14 +128,14 @@ export default function StatsDashboard() {
               </div>
               <h2 className="text-2xl font-bold">Hoạt động gần đây</h2>
             </div>
-            <button className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
+            <Link href="/transactions" className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
               Xem tất cả
-            </button>
+            </Link>
           </div>
           
           <div className="space-y-4">
             <AnimatePresence mode="popLayout">
-              {stats.recentTransactions.map((tx) => (
+              {stats.recentTransactions.slice(0, 5).map((tx) => (
                 <motion.div
                   key={tx.id}
                   layout
@@ -177,10 +178,13 @@ export default function StatsDashboard() {
               </div>
               <h2 className="text-2xl font-bold">Bảng vàng vinh danh</h2>
             </div>
+            <Link href="/donors" className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
+              Xem tất cả
+            </Link>
           </div>
 
           <div className="glass-card rounded-3xl overflow-hidden">
-            {stats.topDonors.map((donor, index) => (
+            {stats.topDonors.slice(0, 5).map((donor, index) => (
               <div
                 key={donor.id}
                 className={`flex items-center justify-between p-6 transition-colors ${

@@ -118,7 +118,7 @@ export default function Home() {
                 color: "text-blue-500"
               },
               { 
-                title: "Open Source Chi Tiêu", 
+                title: "Báo Cáo Chi Tiêu", 
                 desc: "Minh bạch 1000%! Báo cáo từ ly cà phê Highland đến gói mì tôm Hảo Hảo!",
                 icon: LockOpen,
                 color: "text-emerald-500"
