@@ -6,6 +6,8 @@ import { motion } from 'framer-motion'
 import StatsDashboard from '@/components/StatsDashboard'
 import WelcomeModal from '@/components/WelcomeModal'
 import TypingEffect from '@/components/TypingEffect'
+import ChaosManager from '@/components/ChaosManager'
+import ChaosWrapper from '@/components/ChaosWrapper'
 import { ArrowRight, ShieldCheck, Zap, Heart, Copy, Check, X, Star, Info, MessageCircle, AlertCircle, Code, Coffee, Cpu, Terminal, Activity, History, Target, LockOpen, Rocket, HardDrive, XCircle, CheckCircle2, Laptop, Package, Receipt, Video, Bug, MessageSquare, Settings, BarChart3, Mic2, MonitorOff, Keyboard, Wrench } from 'lucide-react'
 import { useState } from 'react'
 
@@ -22,6 +24,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <WelcomeModal />
+      <ChaosManager />
       {/* Hero Section */}
       <section className="relative pt-12 pb-24 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
@@ -31,16 +34,18 @@ export default function Home() {
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center space-y-8">
-            <motion.a
-              href="#donate"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 font-black text-lg border-2 border-emerald-500/20 shadow-xl shadow-emerald-500/10 animate-bounce cursor-pointer hover:bg-emerald-100 dark:hover:bg-emerald-800 transition-colors"
-            >
-              NUÔI (MỘT MÌNH) DEV NGAY
-            </motion.a>
+            <ChaosWrapper>
+              <motion.a
+                href="#donate"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 font-black text-lg border-2 border-emerald-500/20 shadow-xl shadow-emerald-500/10 animate-bounce cursor-pointer hover:bg-emerald-100 dark:hover:bg-emerald-800 transition-colors"
+              >
+                NUÔI (MỘT MÌNH) DEV NGAY
+              </motion.a>
+            </ChaosWrapper>
 
-            <div className="flex flex-col items-center justify-center gap-6">
+            <ChaosWrapper className="flex flex-col items-center justify-center gap-6">
               <TypingEffect
                 text="HÃY NUÔI DEV."
                 className="text-5xl md:text-9xl font-black tracking-tighter leading-[0.8] uppercase gradient-text"
@@ -53,16 +58,19 @@ export default function Home() {
               >
                 <span className="text-blue-600 dark:text-blue-400">ĐỂ CẢ ĐỜI ẤM NO</span>
               </motion.div>
-            </div>
+            </ChaosWrapper>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="max-w-2xl mx-auto text-xl md:text-2xl font-bold text-slate-600 dark:text-slate-300 italic"
-            >
-              "Code chạy bằng cà phê, sao kê chạy bằng Webhook!"
-            </motion.p>
+            <ChaosWrapper>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="max-w-2xl mx-auto text-xl md:text-2xl font-bold text-slate-600 dark:text-slate-300 italic"
+              >
+                "Cầm tiền thì sợ tiền rơi,<br />
+                Mang đi nuôi dev đời đời ấm no."
+              </motion.p>
+            </ChaosWrapper>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -70,18 +78,22 @@ export default function Home() {
               transition={{ delay: 0.3 }}
               className="flex flex-wrap justify-center gap-6"
             >
-              <Link
-                href="/transactions"
-                className="px-10 py-5 bg-blue-600 text-white rounded-3xl font-black text-xl shadow-2xl shadow-blue-500/40 hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
-              >
-                <Activity size={24} /> Check Logs Realtime
-              </Link>
-              <Link
-                href="/donors"
-                className="px-10 py-5 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-3xl font-black text-xl shadow-xl border-4 border-slate-100 dark:border-slate-700 hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
-              >
-                <History size={24} /> Lịch Sử Pull Request
-              </Link>
+              <ChaosWrapper>
+                <Link
+                  href="/transactions"
+                  className="px-10 py-5 bg-blue-600 text-white rounded-3xl font-black text-xl shadow-2xl shadow-blue-500/40 hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
+                >
+                  <Activity size={24} /> Check Logs Realtime
+                </Link>
+              </ChaosWrapper>
+              <ChaosWrapper>
+                <Link
+                  href="/donors"
+                  className="px-10 py-5 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-3xl font-black text-xl shadow-xl border-4 border-slate-100 dark:border-slate-700 hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
+                >
+                  <History size={24} /> Lịch Sử Pull Request
+                </Link>
+              </ChaosWrapper>
             </motion.div>
           </div>
         </div>
@@ -124,15 +136,16 @@ export default function Home() {
                 color: "text-purple-500"
               }
             ].map((f, i) => (
-              <motion.div 
-                key={i}
-                whileHover={{ y: -10 }}
-                className="glass-card p-8 rounded-[2.5rem] border-2 border-transparent hover:border-blue-500/20 transition-all text-center space-y-4 flex flex-col items-center"
-              >
-                <f.icon size={48} className={f.color} />
-                <h3 className="text-xl font-black uppercase tracking-tighter">{f.title}</h3>
-                <p className="text-slate-500 font-medium text-sm leading-relaxed">{f.desc}</p>
-              </motion.div>
+              <ChaosWrapper key={i}>
+                <motion.div 
+                  whileHover={{ y: -10 }}
+                  className="glass-card p-8 rounded-[2.5rem] border-2 border-transparent hover:border-blue-500/20 transition-all text-center space-y-4 flex flex-col items-center"
+                >
+                  <f.icon size={48} className={f.color} />
+                  <h3 className="text-xl font-black uppercase tracking-tighter">{f.title}</h3>
+                  <p className="text-slate-500 font-medium text-sm leading-relaxed">{f.desc}</p>
+                </motion.div>
+              </ChaosWrapper>
             ))}
           </div>
 
@@ -152,57 +165,61 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {/* Legacy Project */}
-            <motion.div 
-              initial={{ x: -50, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              className="p-10 bg-slate-100 dark:bg-slate-900/50 rounded-[3rem] space-y-8 opacity-60 grayscale hover:grayscale-0 transition-all border-2 border-transparent hover:border-red-500/20"
-            >
-              <div className="flex items-center gap-4 text-red-600">
-                <X size={48} strokeWidth={3} />
-                <h3 className="text-4xl font-black uppercase tracking-tighter">Legacy Dev:</h3>
-              </div>
-              <ul className="space-y-6">
-                {[
-                  "Sao kê bằng tay (Manual Input), sai số tùm lum",
-                  "File báo cáo PDF mờ căm như màn hình xanh chết chóc",
-                  "Spending logic: 1 + 1 = 0 (Do lỗi tràn bộ nhớ)",
-                  "Block người hỏi vì \"It works on my machine\""
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-4 text-xl font-bold text-slate-400">
-                    <XCircle className="text-red-500 mt-1 flex-shrink-0" size={24} /> {item}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+            <ChaosWrapper>
+              <motion.div 
+                initial={{ x: -50, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                className="p-10 bg-slate-100 dark:bg-slate-900/50 rounded-[3rem] space-y-8 opacity-60 grayscale hover:grayscale-0 transition-all border-2 border-transparent hover:border-red-500/20"
+              >
+                <div className="flex items-center gap-4 text-red-600">
+                  <X size={48} strokeWidth={3} />
+                  <h3 className="text-4xl font-black uppercase tracking-tighter">Legacy Dev:</h3>
+                </div>
+                <ul className="space-y-6">
+                  {[
+                    "Sao kê bằng tay (Manual Input), sai số tùm lum",
+                    "File báo cáo PDF mờ căm như màn hình xanh chết chóc",
+                    "Spending logic: 1 + 1 = 0 (Do lỗi tràn bộ nhớ)",
+                    "Block người hỏi vì \"It works on my machine\""
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-4 text-xl font-bold text-slate-400">
+                      <XCircle className="text-red-500 mt-1 flex-shrink-0" size={24} /> {item}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            </ChaosWrapper>
 
             {/* MODERN DEV */}
-            <motion.div 
-              initial={{ x: 50, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              className="p-10 bg-blue-600 text-white rounded-[3rem] space-y-8 shadow-2xl shadow-blue-500/40 relative overflow-hidden group"
-            >
-              <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-150 transition-transform">
-                <Terminal size={120} fill="white" />
-              </div>
-              <div className="flex items-center gap-4 relative z-10">
-                <Check size={48} strokeWidth={3} />
-                <h3 className="text-4xl font-black uppercase tracking-tighter">Modern Dev:</h3>
-              </div>
-              <ul className="space-y-6 relative z-10">
-                {[
-                  "Unit Test cho từng đồng chi tiêu (100% Coverage)",
-                  "Hóa đơn 4K, Render bằng GPU, sắc nét đến từng pixel",
-                  "Webhook tự động báo về từng gói mì tôm",
-                  "Mở Issue công khai, trả lời nhanh hơn ChatGPT"
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-4 text-xl font-bold">
-                    <CheckCircle2 className="text-white mt-1 flex-shrink-0" size={24} /> {item}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+            <ChaosWrapper>
+              <motion.div 
+                initial={{ x: 50, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                className="p-10 bg-blue-600 text-white rounded-[3rem] space-y-8 shadow-2xl shadow-blue-500/40 relative overflow-hidden group"
+              >
+                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-150 transition-transform">
+                  <Terminal size={120} fill="white" />
+                </div>
+                <div className="flex items-center gap-4 relative z-10">
+                  <Check size={48} strokeWidth={3} />
+                  <h3 className="text-4xl font-black uppercase tracking-tighter">Modern Dev:</h3>
+                </div>
+                <ul className="space-y-6 relative z-10">
+                  {[
+                    "Unit Test cho từng đồng chi tiêu (100% Coverage)",
+                    "Hóa đơn 4K, Render bằng GPU, sắc nét đến từng pixel",
+                    "Webhook tự động báo về từng gói mì tôm",
+                    "Mở Issue công khai, trả lời nhanh hơn ChatGPT"
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-4 text-xl font-bold">
+                      <CheckCircle2 className="text-white mt-1 flex-shrink-0" size={24} /> {item}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            </ChaosWrapper>
           </div>
         </div>
       </section>
