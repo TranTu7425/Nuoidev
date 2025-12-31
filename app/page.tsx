@@ -34,7 +34,7 @@ export default function Home() {
               animate={{ opacity: 1, scale: 1 }}
               className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 font-black text-lg border-2 border-emerald-500/20 shadow-xl shadow-emerald-500/10 animate-bounce cursor-pointer hover:bg-emerald-100 dark:hover:bg-emerald-800 transition-colors"
             >
-              NUÔI DEV NGAY
+              NUÔI (MỘT MÌNH) DEV NGAY
             </motion.a>
 
             <motion.h1
