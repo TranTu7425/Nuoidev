@@ -103,7 +103,7 @@ export default function WelcomeModal() {
               </button>
               
               <p className="text-[10px] text-center text-slate-400 font-bold uppercase tracking-[0.2em]">
-                System Status: Ready to be Funded 🚀
+                System Status: Ready to be Funded
               </p>
             </div>
           </motion.div>

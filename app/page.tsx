@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import StatsDashboard from '@/components/StatsDashboard'
 import WelcomeModal from '@/components/WelcomeModal'
+import TypingEffect from '@/components/TypingEffect'
 import { ArrowRight, ShieldCheck, Zap, Heart, Copy, Check, X, Star, Info, MessageCircle, AlertCircle, Code, Coffee, Cpu, Terminal, Activity, History, Target, LockOpen, Rocket, HardDrive, XCircle, CheckCircle2, Laptop, Package, Receipt, Video, Bug, MessageSquare, Settings, BarChart3, Mic2, MonitorOff, Keyboard, Wrench } from 'lucide-react'
 import { useState } from 'react'
 
@@ -39,20 +40,26 @@ export default function Home() {
               NUÔI (MỘT MÌNH) DEV NGAY
             </motion.a>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-7xl md:text-9xl font-black tracking-tighter leading-[0.8] uppercase"
-            >
-              HÃY <span className="gradient-text">DEPLOY</span> CƠM.
-            </motion.h1>
+            <div className="flex flex-col items-center justify-center gap-6">
+              <TypingEffect
+                text="HÃY NUÔI DEV."
+                className="text-5xl md:text-9xl font-black tracking-tighter leading-[0.8] uppercase gradient-text"
+              />
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 2, duration: 0.8 }}
+                className="text-xl md:text-4xl font-black text-slate-900 dark:text-white uppercase tracking-[0.2em] flex items-center gap-4 text-center"
+              >
+                <span className="text-blue-600 dark:text-blue-400">ĐỂ CẢ ĐỜI ẤM NO</span>
+              </motion.div>
+            </div>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="max-w-2xl mx-auto text-2xl font-bold text-slate-600 dark:text-slate-300 italic"
+              className="max-w-2xl mx-auto text-xl md:text-2xl font-bold text-slate-600 dark:text-slate-300 italic"
             >
               "Code chạy bằng cà phê, sao kê chạy bằng Webhook!"
             </motion.p>
@@ -84,10 +91,10 @@ export default function Home() {
       <section className="py-24 bg-slate-50/50 dark:bg-slate-900/20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16 space-y-4">
-            <h2 className="text-5xl font-black tracking-tight uppercase flex items-center justify-center gap-4">
-              <Target size={48} className="text-blue-600" /> TẠI SAO NÊN NUÔI DEV?
+            <h2 className="text-3xl md:text-5xl font-black tracking-tight uppercase flex items-center justify-center gap-4">
+              <Target size={48} className="text-blue-600 hidden md:block" /> TẠI SAO NÊN NUÔI DEV?
             </h2>
-            <p className="text-slate-500 font-bold uppercase tracking-widest">Nếu không nuôi, Dev sẽ tự sinh Bug để giải trí!</p>
+            <p className="text-slate-500 font-bold uppercase tracking-widest text-sm md:text-base">Nếu không nuôi, Dev sẽ tự sinh Bug để giải trí!</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-24">
@@ -137,8 +144,8 @@ export default function Home() {
       <section className="py-32 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-6xl font-black tracking-tighter mb-4 uppercase flex items-center justify-center gap-4">
-              <HardDrive size={54} className="text-slate-400" /> SO SÁNH VỚI "PROJECT KHÁC"
+            <h2 className="text-3xl md:text-6xl font-black tracking-tighter mb-4 uppercase flex items-center justify-center gap-4">
+              <HardDrive size={54} className="text-slate-400 hidden md:block" /> SO SÁNH VỚI "PROJECT KHÁC"
             </h2>
             <div className="h-2 w-24 bg-blue-600 mx-auto rounded-full" />
           </div>
@@ -207,8 +214,8 @@ export default function Home() {
             {/* Cam Kết Của Dev */}
             <div className="space-y-12">
               <div className="space-y-4">
-                <h2 className="text-5xl font-black tracking-tight uppercase flex items-center gap-4">
-                  <Laptop size={48} className="text-amber-500" /> CAM KẾT VÀNG CỦA DEV:
+                <h2 className="text-3xl md:text-5xl font-black tracking-tight uppercase flex items-center gap-4">
+                  <Laptop size={48} className="text-amber-500 hidden md:block" /> CAM KẾT VÀNG CỦA DEV:
                 </h2>
                 <div className="h-1 w-20 bg-amber-500 rounded-full" />
               </div>
@@ -239,8 +246,8 @@ export default function Home() {
             {/* Resource Allocation */}
             <div className="space-y-12">
               <div className="space-y-4">
-                <h2 className="text-5xl font-black tracking-tight uppercase flex items-center gap-4">
-                  <Settings size={48} className="text-blue-600" /> ALLOCATE RESOURCE VÀO ĐÂU?
+                <h2 className="text-3xl md:text-5xl font-black tracking-tight uppercase flex items-center gap-4">
+                  <Settings size={48} className="text-blue-600 hidden md:block" /> ALLOCATE RESOURCE VÀO ĐÂU?
                 </h2>
                 <div className="h-1 w-20 bg-blue-600 rounded-full" />
               </div>
@@ -285,17 +292,17 @@ export default function Home() {
             <Code size={48} strokeWidth={3} />
           </div>
           <div className="space-y-6">
-            <h2 className="text-5xl font-black tracking-tight uppercase tracking-widest flex items-center justify-center gap-4">
-              <Mic2 size={48} /> TÂM THƯ CỦA DEV
+            <h2 className="text-3xl md:text-5xl font-black tracking-tight uppercase tracking-widest flex items-center justify-center gap-4">
+              <Mic2 size={48} className="hidden md:block" /> TÂM THƯ CỦA DEV
             </h2>
-            <p className="text-2xl font-bold text-slate-600 dark:text-slate-300 leading-relaxed italic">
+            <p className="text-xl md:text-2xl font-bold text-slate-600 dark:text-slate-300 leading-relaxed italic">
               "Trong thế giới mà Bug nhiều hơn tính năng, Tôi xin cam kết: HÃY NUÔI DEV!"
             </p>
             <p className="text-lg font-medium text-slate-500 leading-relaxed flex items-center justify-center gap-2">
-              Dev nghèo, Dev cần cà phê để thức đêm, nhưng Dev KHÔNG BAO GIỜ gian lận Logic! Mỗi đồng các bạn gửi, Dev sẽ Optimize Resource đến mức tối đa! <Heart size={18} className="text-red-500 inline" />
+              Dev nghèo, Dev cần cà phê để thức đêm, nhưng Dev KHÔNG BAO GIỜ gian lận Logic! Mỗi đồng các bạn gửi, Dev sẽ Optimize Resource đến mức tối đa!
             </p>
             <p className="text-sm font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest flex items-center justify-center gap-2">
-              P/S: Hứa không mua Macbook Pro M4 bằng tiền donate này đâu (Trừ khi anh chị bảo mua!) <MonitorOff size={16} />
+              P/S: Hứa không mua Macbook Pro M4 bằng tiền donate này đâu (Trừ khi anh chị bảo mua!)
             </p>
           </div>
         </div>
@@ -306,10 +313,10 @@ export default function Home() {
         <div className="absolute inset-0 bg-blue-600/10 -z-10" />
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-16 space-y-4">
-            <h2 className="text-5xl font-black tracking-tighter uppercase flex items-center justify-center gap-4">
-              <Keyboard size={48} /> PUSH CODE, GET CƠM!
+            <h2 className="text-3xl md:text-5xl font-black tracking-tighter uppercase flex items-center justify-center gap-4">
+              <Keyboard size={48} className="hidden md:block" /> PUSH CODE, GET CƠM!
             </h2>
-            <p className="text-slate-400 font-bold tracking-widest uppercase flex items-center justify-center gap-2">
+            <p className="text-slate-400 font-bold tracking-widest uppercase flex items-center justify-center gap-2 text-sm md:text-base">
               Quét mã dưới đây để Inject thêm cà phê vào hệ thống! <Coffee size={20} className="text-blue-400" />
             </p>
           </div>
@@ -325,13 +332,13 @@ export default function Home() {
                 
                 <div className="space-y-1">
                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400">Chủ tài khoản (Root Admin)</p>
-                  <p className="text-3xl font-black tracking-tight uppercase">TRAN ANH TU</p>
+                  <p className="text-2xl md:text-3xl font-black tracking-tight uppercase">TRAN ANH TU</p>
                 </div>
 
                 <div className="space-y-1">
                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400">Số tài khoản (Address)</p>
                   <div className="flex items-center gap-4">
-                    <p className="text-4xl font-mono font-black tracking-tighter text-white">
+                    <p className="text-3xl md:text-4xl font-mono font-black tracking-tighter text-white">
                       {stk}
                     </p>
                     <button 
