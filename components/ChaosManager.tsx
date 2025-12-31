@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import { Bomb, RefreshCcw } from 'lucide-react'
+import { playSound } from '@/lib/sounds'
 
 export default function ChaosManager() {
   const [isChaos, setIsChaos] = useState(false)
@@ -12,6 +13,9 @@ export default function ChaosManager() {
     if (isChaos) return
     setIsChaos(true)
     
+    // Play explosion sound
+    playSound('EXPLOSION')
+
     // Phát sự kiện cho toàn hệ thống
     window.dispatchEvent(new CustomEvent('chaos-mode', { detail: { active: true } }))
     
@@ -23,6 +27,7 @@ export default function ChaosManager() {
   }, [isChaos])
 
   const requestPermission = async () => {
+    playSound('CLICK')
     if (typeof DeviceMotionEvent !== 'undefined' && 
         typeof (DeviceMotionEvent as any).requestPermission === 'function') {
       try {

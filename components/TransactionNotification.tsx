@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShieldCheck, Heart, X } from 'lucide-react'
 import { formatCurrency } from '@/lib/utils'
+import { playSound } from '@/lib/sounds'
 
 interface Transaction {
   id: string
@@ -32,11 +33,14 @@ export default function TransactionNotification() {
       eventSource.addEventListener('message', (event) => {
         try {
           const data = JSON.parse(event.data)
-        if (data.type === 'new_transactions' && data.data) {
-          // Trigger coffee rain
-          window.dispatchEvent(new CustomEvent('donation-rain'))
-          
-          const newTxs = data.data as Transaction[]
+          if (data.type === 'new_transactions' && data.data) {
+            // Trigger coffee rain
+            window.dispatchEvent(new CustomEvent('donation-rain'))
+            
+            // Play success sound
+            playSound('SUCCESS')
+            
+            const newTxs = data.data as Transaction[]
           
           // Filter out transactions we've already notified to prevent duplicates
           setNotifications((prev) => {
