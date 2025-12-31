@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { AlertTriangle, X, CheckCircle2, ShieldAlert } from 'lucide-react'
+import Link from 'next/link'
 
 export default function WelcomeModal() {
   const [isOpen, setIsOpen] = useState(false)
@@ -66,7 +67,15 @@ export default function WelcomeModal() {
                 {[
                   {
                     icon: <AlertTriangle className="text-amber-500" />,
-                    text: "Website này mang tính chất giải trí cao và gây quỹ tự nguyện để duy trì uptime của Developer. Khi deploy cơm đồng nghĩa với việc bạn đã đồng ý với điều kiện và điều khoản của dự án."
+                    text: (
+                      <span>
+                        Website này mang tính chất giải trí cao và gây quỹ tự nguyện để duy trì uptime của Developer. Khi deploy cơm đồng nghĩa với việc bạn đã đồng ý với{' '}
+                        <Link href="/terms" className="text-amber-600 dark:text-amber-400 underline font-black hover:text-amber-700 transition-colors">
+                          điều kiện và điều khoản
+                        </Link>{' '}
+                        của dự án.
+                      </span>
+                    )
                   },
                   {
                     icon: <CheckCircle2 className="text-emerald-500" />,

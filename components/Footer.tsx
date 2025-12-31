@@ -19,13 +19,13 @@ export default function Footer() {
               Dự án Nuôi (MỘT MÌNH) Dev. Mọi giao dịch được xác thực tự động và công khai 100%.
             </p>
             <div className="flex gap-4">
-              <a href="https://github.com/TranTu7425" target="_blank" rel="noopener noreferrer" className="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl hover:text-blue-600 transition-colors">
+              <a href="https://github.com/TranTu7425" target="_blank" rel="noopener noreferrer" className="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl hover:text-blue-600 transition-colors" aria-label="Github">
                 <Github size={20} />
               </a>
-              <a href="https://www.facebook.com/tudzntg/" target="_blank" rel="noopener noreferrer" className="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl hover:text-blue-600 transition-colors">
+              <a href="https://www.facebook.com/tudzntg/" target="_blank" rel="noopener noreferrer" className="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl hover:text-blue-600 transition-colors" aria-label="Facebook">
                 <Facebook size={20} />
               </a>
-              <a href="#" target="_blank" rel="noopener noreferrer" className="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl hover:text-blue-700 transition-colors">
+              <a href="#" target="_blank" rel="noopener noreferrer" className="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl hover:text-blue-700 transition-colors" aria-label="Linkedin">
                 <Linkedin size={20} />
               </a>
             </div>
@@ -56,8 +56,8 @@ export default function Footer() {
             © 2025 Nuoidev Transparency Project. All rights reserved.
           </p>
           <div className="flex gap-8 text-xs font-bold text-slate-400 uppercase tracking-widest">
-            <a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Quy trình xác thực</a>
-            <a href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">Điều khoản</a>
+            <Link href="/terms" className="hover:text-slate-900 dark:hover:text-white transition-colors">Quy trình xác thực</Link>
+            <Link href="/terms" className="hover:text-slate-900 dark:hover:text-white transition-colors">Điều khoản</Link>
           </div>
         </div>
       </div>
