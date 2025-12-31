@@ -28,12 +28,20 @@ export default function TransactionList({ realtime = true }) {
   useEffect(() => {
     if (realtime) {
       const eventSource = new EventSource('/api/transactions/stream')
-      eventSource.onmessage = (event) => {
-        const data = JSON.parse(event.data)
-        if (data.type === 'new_transactions' && data.data) {
-          setTransactions((prev) => [...data.data, ...prev])
+      eventSource.addEventListener('message', (event) => {
+        try {
+          const data = JSON.parse(event.data)
+          if (data.type === 'new_transactions' && data.data) {
+            setTransactions((prev) => {
+              const prevIds = new Set(prev.map(tx => tx.id))
+              const uniqueNewTxs = (data.data as Transaction[]).filter(tx => !prevIds.has(tx.id))
+              return [...uniqueNewTxs, ...prev]
+            })
+          }
+        } catch (error) {
+          console.error('Error parsing transaction stream:', error)
         }
-      }
+      })
       return () => eventSource.close()
     }
   }, [realtime])

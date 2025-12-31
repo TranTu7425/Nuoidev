@@ -28,15 +28,23 @@ export async function GET(request: NextRequest) {
             orderBy: { createdAt: 'desc' },
           })
 
+          // Heartbeat to keep connection alive
+          controller.enqueue(encoder.encode(': heartbeat\n\n'))
+
           if (newTransactions.length > 0) {
+            // Convert Decimal to Number for JSON serialization
+            const serializedTransactions = newTransactions.map(tx => ({
+              ...tx,
+              amount: Number(tx.amount)
+            }))
+
             controller.enqueue(
               encoder.encode(
-                `data: ${JSON.stringify({ type: 'new_transactions', data: newTransactions })}\n\n`
+                `data: ${JSON.stringify({ type: 'new_transactions', data: serializedTransactions })}\n\n`
               )
             )
           }
           
-          // Update lastCheck after each check to avoid missing transactions
           lastCheck = checkTime
         } catch (error) {
           console.error('Error in SSE stream:', error)

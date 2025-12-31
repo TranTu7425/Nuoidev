@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import TransactionNotification from "@/components/TransactionNotification";
 
 export const metadata: Metadata = {
   title: "Nuoidev - Gây quỹ ủng hộ Developer minh bạch",
@@ -24,6 +25,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Header />
+          <TransactionNotification />
           <main className="flex-grow pt-24">
             {children}
           </main>
