@@ -32,11 +32,14 @@ export default function TransactionNotification() {
       eventSource.addEventListener('message', (event) => {
         try {
           const data = JSON.parse(event.data)
-          if (data.type === 'new_transactions' && data.data) {
-            const newTxs = data.data as Transaction[]
-            
-            // Filter out transactions we've already notified to prevent duplicates
-            setNotifications((prev) => {
+        if (data.type === 'new_transactions' && data.data) {
+          // Trigger coffee rain
+          window.dispatchEvent(new CustomEvent('donation-rain'))
+          
+          const newTxs = data.data as Transaction[]
+          
+          // Filter out transactions we've already notified to prevent duplicates
+          setNotifications((prev) => {
               const prevIds = new Set(prev.map(n => n.id))
               const uniqueNewTxs = newTxs.filter(tx => !prevIds.has(tx.id))
               

@@ -4,6 +4,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import TransactionNotification from "@/components/TransactionNotification";
+import CoffeeRain from "@/components/CoffeeRain";
+import ForbiddenButton from "@/components/ForbiddenButton";
 
 export const metadata: Metadata = {
   title: "Nuoidev - Gây quỹ ủng hộ Developer minh bạch",
@@ -26,6 +28,8 @@ export default function RootLayout({
         >
           <Header />
           <TransactionNotification />
+          <CoffeeRain />
+          <ForbiddenButton />
           <main className="flex-grow pt-24">
             {children}
           </main>
