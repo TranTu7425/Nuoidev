@@ -8,6 +8,7 @@ import WelcomeModal from '@/components/WelcomeModal'
 import TypingEffect from '@/components/TypingEffect'
 import ChaosManager from '@/components/ChaosManager'
 import ChaosWrapper from '@/components/ChaosWrapper'
+import EvasiveWrapper from '@/components/EvasiveWrapper'
 import BSOD from '@/components/BSOD'
 import { ArrowRight, ShieldCheck, Zap, Heart, Copy, Check, X, Star, Info, MessageCircle, AlertCircle, Code, Coffee, Cpu, Terminal, Activity, History, Target, LockOpen, Rocket, HardDrive, XCircle, CheckCircle2, Laptop, Package, Receipt, Video, Bug, MessageSquare, Settings, BarChart3, Mic2, MonitorOff, Keyboard, Wrench } from 'lucide-react'
 import { useState } from 'react'
@@ -38,14 +39,16 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center space-y-8">
             <ChaosWrapper>
-              <motion.a
-                href="#donate"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 font-black text-lg border-2 border-emerald-500/20 shadow-xl shadow-emerald-500/10 animate-bounce cursor-pointer hover:bg-emerald-100 dark:hover:bg-emerald-800 transition-colors"
-              >
-                NUÔI (MỘT MÌNH) DEV NGAY
-              </motion.a>
+              <EvasiveWrapper>
+                <motion.a
+                  href="#donate"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 font-black text-lg border-2 border-emerald-500/20 shadow-xl shadow-emerald-500/10 animate-bounce cursor-pointer hover:bg-emerald-100 dark:hover:bg-emerald-800 transition-colors"
+                >
+                  NUÔI (MỘT MÌNH) DEV NGAY
+                </motion.a>
+              </EvasiveWrapper>
             </ChaosWrapper>
 
             <ChaosWrapper className="flex flex-col items-center justify-center gap-6">
@@ -337,7 +340,7 @@ export default function Home() {
               <Keyboard size={48} className="hidden md:block" /> PUSH CODE, GET CƠM!
             </h2>
             <p className="text-slate-400 font-bold tracking-widest uppercase flex items-center justify-center gap-2 text-sm md:text-base">
-              Quét mã dưới đây để Inject thêm cà phê vào hệ thống! <Coffee size={20} className="text-blue-400" />
+            Dev ngại lắm, đừng đưa tiền cho Dev! Nhưng nếu bạn đã cuộn đến đây thì Dev xin cảm ơn vì tấm lòng hảo tâm của bạn nhìu nhé :3
             </p>
           </div>
 
