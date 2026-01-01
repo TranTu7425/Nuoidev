@@ -78,24 +78,24 @@ export default function TransactionsPage() {
                 <Wheat size={28} />
               </div>
               <div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Lúa về hôm nay</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Tổng quyên góp</p>
                 <p className="text-2xl font-black text-emerald-600">
-                  {stats ? formatCurrency(Number(stats.todayAmount)) : '...'}
+                  {stats ? formatCurrency(Number(stats.totalAmount)) : '...'}
                 </p>
               </div>
             </motion.div>
 
             <motion.div 
               whileHover={{ scale: 1.02 }}
-              className="glass-card p-6 rounded-[2rem] border-2 border-purple-500/10 flex items-center gap-5"
+              className="glass-card p-6 rounded-[2rem] border-2 border-red-500/10 flex items-center gap-5"
             >
-              <div className="h-14 w-14 rounded-2xl bg-purple-50 dark:bg-purple-900/20 text-purple-600 flex items-center justify-center">
+              <div className="h-14 w-14 rounded-2xl bg-red-50 dark:bg-red-900/20 text-red-600 flex items-center justify-center">
                 <CalendarDays size={28} />
               </div>
               <div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Quỹ tháng này</p>
-                <p className="text-2xl font-black text-purple-600">
-                  {stats ? formatCurrency(Number(stats.monthAmount)) : '...'}
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Đã giải ngân</p>
+                <p className="text-2xl font-black text-red-600">
+                  {stats ? formatCurrency(Number(stats.totalDisbursed)) : '...'}
                 </p>
               </div>
             </motion.div>
@@ -108,9 +108,9 @@ export default function TransactionsPage() {
                 <Wallet size={28} />
               </div>
               <div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Số dư khả dụng</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Số dư hiện tại</p>
                 <p className="text-2xl font-black text-blue-600">
-                  {stats ? formatCurrency(Number(stats.totalAmount)) : '...'}
+                  {stats ? formatCurrency(Number(stats.currentBalance)) : '...'}
                 </p>
               </div>
             </motion.div>

@@ -52,10 +52,21 @@ export async function GET(request: NextRequest) {
       where: { transactionCount: { gt: 0 } },
     })
 
+    // 4. Tổng giải ngân
+    const disbursementResult = await prisma.disbursement.aggregate({
+      _sum: { amount: true }
+    })
+
+    const totalDisbursed = disbursementResult._sum.amount || 0
+    const totalRevenue = totalResult._sum.amount || 0
+    const currentBalance = Number(totalRevenue) - Number(totalDisbursed)
+
     return NextResponse.json({
       todayAmount: todayResult._sum.amount || 0,
       monthAmount: monthResult._sum.amount || 0,
-      totalAmount: totalResult._sum.amount || 0,
+      totalAmount: totalRevenue,
+      totalDisbursed,
+      currentBalance,
       totalTransactions: totalResult._count || 0,
       totalDonors,
       recentTransactions: verifiedTransactions,
