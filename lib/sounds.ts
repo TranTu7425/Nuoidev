@@ -6,6 +6,7 @@ const SOUNDS = {
   CLICK: '#',   // Click
   ALERT: '#',   // Alert/Siren
   EXPLOSION: '/sounds/flashbang.MP3', // Flashbang effect
+  GLASS_BREAK: '/sounds/glass.MP3', // Glass break sound
 }
 
 // Preload audio objects for better responsiveness

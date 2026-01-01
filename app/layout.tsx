@@ -9,6 +9,7 @@ import ForbiddenButton from "@/components/ForbiddenButton";
 import PoopCursor from "@/components/PoopCursor";
 import ComicSansTakeover from "@/components/ComicSansTakeover";
 import CaptchaWordle from "@/components/CaptchaWordle";
+import BrokenScreen from "@/components/BrokenScreen";
 
 export const metadata: Metadata = {
   title: "Nuoidev - Gây quỹ ủng hộ Developer minh bạch",
@@ -32,6 +33,7 @@ export default function RootLayout({
           <PoopCursor />
           <ComicSansTakeover />
           <CaptchaWordle />
+          <BrokenScreen />
           <Header />
           <TransactionNotification />
           <CoffeeRain />
