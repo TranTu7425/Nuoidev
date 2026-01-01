@@ -8,11 +8,13 @@ import WelcomeModal from '@/components/WelcomeModal'
 import TypingEffect from '@/components/TypingEffect'
 import ChaosManager from '@/components/ChaosManager'
 import ChaosWrapper from '@/components/ChaosWrapper'
+import BSOD from '@/components/BSOD'
 import { ArrowRight, ShieldCheck, Zap, Heart, Copy, Check, X, Star, Info, MessageCircle, AlertCircle, Code, Coffee, Cpu, Terminal, Activity, History, Target, LockOpen, Rocket, HardDrive, XCircle, CheckCircle2, Laptop, Package, Receipt, Video, Bug, MessageSquare, Settings, BarChart3, Mic2, MonitorOff, Keyboard, Wrench } from 'lucide-react'
 import { useState } from 'react'
 
 export default function Home() {
   const [copied, setCopied] = useState(false)
+  const [showBSOD, setShowBSOD] = useState(false)
   const stk = "3711007752"
 
   const copyToClipboard = () => {
@@ -25,6 +27,7 @@ export default function Home() {
     <div className="min-h-screen">
       <WelcomeModal />
       <ChaosManager />
+      <BSOD isActive={showBSOD} onClose={() => setShowBSOD(false)} />
       {/* Hero Section */}
       <section className="relative pt-12 pb-24 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
@@ -371,6 +374,7 @@ export default function Home() {
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => setShowBSOD(true)}
                 className="w-full py-6 bg-white text-slate-900 rounded-[2rem] font-black text-2xl shadow-2xl shadow-white/10 flex items-center justify-center gap-3"
               >
                 <Wrench size={28} /> TÔI MUỐN MAINTAIN BẠN!
