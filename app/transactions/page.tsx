@@ -1,19 +1,36 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { History, ShieldCheck, Wheat, Wallet, CalendarDays } from 'lucide-react'
+import { History, ShieldCheck, Wheat, Wallet, CalendarDays, FileDown } from 'lucide-react'
 import TransactionList from '@/components/TransactionList'
 import { useEffect, useState } from 'react'
 import { formatCurrency } from '@/lib/utils'
+import { exportTransactionsToPDF } from '@/lib/export-pdf'
 
 export default function TransactionsPage() {
   const [stats, setStats] = useState<any>(null)
+  const [isExporting, setIsExporting] = useState(false)
 
   useEffect(() => {
     fetch('/api/stats')
       .then(res => res.json())
       .then(data => setStats(data))
   }, [])
+
+  const handleExportPDF = async () => {
+    setIsExporting(true)
+    try {
+      // Fetch all verified transactions for export
+      const res = await fetch('/api/transactions?limit=1000&status=verified')
+      const data = await res.json()
+      await exportTransactionsToPDF(data.data)
+    } catch (error) {
+      console.error('Export failed:', error)
+      alert('Có lỗi khi xuất PDF. Vui lòng thử lại.')
+    } finally {
+      setIsExporting(false)
+    }
+  }
 
   return (
     <div className="min-h-screen">
@@ -24,14 +41,31 @@ export default function TransactionsPage() {
           className="space-y-12"
         >
           {/* Header & Description */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 text-blue-600 dark:text-blue-400">
-              <History size={32} />
-              <h1 className="text-4xl md:text-5xl font-black tracking-tight uppercase">Check Logs Realtime</h1>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 text-blue-600 dark:text-blue-400">
+                <History size={32} />
+                <h1 className="text-4xl md:text-5xl font-black tracking-tight uppercase">Check Logs Realtime</h1>
+              </div>
+              <p className="text-xl text-slate-500 max-w-2xl">
+                Danh sách chi tiết các lệnh "Deploy Cơm" được Webhook xác thực tự động.
+              </p>
             </div>
-            <p className="text-xl text-slate-500 max-w-2xl">
-              Danh sách chi tiết các lệnh "Deploy Cơm" được Webhook xác thực tự động.
-            </p>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleExportPDF}
+              disabled={isExporting}
+              className="flex items-center gap-2 px-6 py-3 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 rounded-2xl font-bold text-slate-700 dark:text-slate-300 hover:border-blue-500/50 hover:text-blue-600 dark:hover:text-blue-400 transition-all shadow-lg shadow-slate-200/50 dark:shadow-none disabled:opacity-50"
+            >
+              {isExporting ? (
+                <div className="h-5 w-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <FileDown size={20} />
+              )}
+              Xuất sao kê PDF
+            </motion.button>
           </div>
 
           {/* New Stats Row */}
