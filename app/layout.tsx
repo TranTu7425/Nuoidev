@@ -6,6 +6,8 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import TransactionNotification from "@/components/TransactionNotification";
 import CoffeeRain from "@/components/CoffeeRain";
 import ForbiddenButton from "@/components/ForbiddenButton";
+import PoopCursor from "@/components/PoopCursor";
+import ComicSansTakeover from "@/components/ComicSansTakeover";
 
 export const metadata: Metadata = {
   title: "Nuoidev - Gây quỹ ủng hộ Developer minh bạch",
@@ -26,6 +28,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <PoopCursor />
+          <ComicSansTakeover />
           <Header />
           <TransactionNotification />
           <CoffeeRain />
