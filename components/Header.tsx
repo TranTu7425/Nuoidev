@@ -11,8 +11,8 @@ import { useEffect, useState } from 'react'
 const navItems = [
   { name: 'Trang chủ', href: '/', icon: Home },
   { name: 'Xem giao dịch', href: '/transactions', icon: History },
-  { name: 'Người ủng hộ', href: '/donors', icon: Users },
   { name: 'Giải ngân', href: '/disbursements', icon: ReceiptText },
+  { name: 'Người ủng hộ', href: '/donors', icon: Users },
 ]
 
 export default function Header() {

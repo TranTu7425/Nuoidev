@@ -41,7 +41,7 @@ export default function DisbursementsPage() {
                 <h1 className="text-4xl md:text-5xl font-black tracking-tight uppercase">Nhật ký Giải ngân</h1>
               </div>
               <p className="text-xl text-slate-500 max-w-2xl">
-                Minh bạch quá trình sử dụng nguồn quỹ cho các hoạt động thiện nguyện.
+                Minh bạch quá trình sử dụng nguồn quỹ cho các hoạt động cần thiết để duy trì sự sống.
               </p>
             </div>
           </div>

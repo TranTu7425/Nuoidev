@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { formatCurrency, formatDateShort } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Heart, MessageCircle, Send, ImageIcon } from 'lucide-react'
+import { Heart, MessageCircle, Send, ImageIcon, X, ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface Comment {
   id: string
@@ -32,6 +32,21 @@ export default function DisbursementCard({ disbursement }: { disbursement: Disbu
   const [authorName, setAuthorName] = useState('')
   const [loadingComments, setLoadingComments] = useState(false)
   const [isLiking, setIsLiking] = useState(false)
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null)
+
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (selectedImageIndex !== null) {
+      setSelectedImageIndex((selectedImageIndex + 1) % disbursement.images.length)
+    }
+  }
+
+  const handlePrevImage = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (selectedImageIndex !== null) {
+      setSelectedImageIndex((selectedImageIndex - 1 + disbursement.images.length) % disbursement.images.length)
+    }
+  }
 
   const handleLike = async () => {
     if (isLiking) return
@@ -84,24 +99,33 @@ export default function DisbursementCard({ disbursement }: { disbursement: Disbu
   }
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="glass-card overflow-hidden rounded-[2rem] border border-slate-200 dark:border-slate-800"
-    >
-      {/* Images Grid */}
-      {disbursement.images && disbursement.images.length > 0 && (
-        <div className={`grid gap-1 ${disbursement.images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
-          {disbursement.images.map((url, idx) => (
-            <img 
-              key={idx} 
-              src={url} 
-              alt={`Disbursement ${idx}`} 
-              className="w-full h-64 object-cover"
-            />
-          ))}
-        </div>
-      )}
+    <>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="glass-card overflow-hidden rounded-[2rem] border border-slate-200 dark:border-slate-800"
+      >
+        {/* Images Grid */}
+        {disbursement.images && disbursement.images.length > 0 && (
+          <div className={`grid gap-1 ${disbursement.images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+            {disbursement.images.map((url, idx) => (
+              <div 
+                key={idx} 
+                className="relative h-64 overflow-hidden cursor-zoom-in group/img"
+                onClick={() => setSelectedImageIndex(idx)}
+              >
+                <img 
+                  src={url} 
+                  alt={`Disbursement ${idx}`} 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover/img:bg-black/20 transition-colors flex items-center justify-center">
+                  <ImageIcon className="text-white opacity-0 group-hover/img:opacity-100 transition-opacity" size={32} />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
       <div className="p-6 space-y-4">
         <div className="flex justify-between items-start">
@@ -205,6 +229,66 @@ export default function DisbursementCard({ disbursement }: { disbursement: Disbu
         </AnimatePresence>
       </div>
     </motion.div>
-  )
+
+    {/* Image Viewer Modal */}
+    <AnimatePresence>
+      {selectedImageIndex !== null && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 md:p-10">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImageIndex(null)}
+            className="absolute inset-0 cursor-zoom-out"
+          />
+          
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            className="relative max-w-5xl w-full h-full flex items-center justify-center z-10"
+          >
+            <img 
+              src={disbursement.images[selectedImageIndex]} 
+              alt="Full preview" 
+              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+            />
+
+            {/* Controls */}
+            <div className="absolute top-0 right-0 p-4">
+              <button 
+                onClick={() => setSelectedImageIndex(null)}
+                className="p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors backdrop-blur-md"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            {disbursement.images.length > 1 && (
+              <>
+                <button 
+                  onClick={handlePrevImage}
+                  className="absolute left-4 p-4 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors backdrop-blur-md"
+                >
+                  <ChevronLeft size={32} />
+                </button>
+                <button 
+                  onClick={handleNextImage}
+                  className="absolute right-4 p-4 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors backdrop-blur-md"
+                >
+                  <ChevronRight size={32} />
+                </button>
+                
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-white text-sm font-bold">
+                  {selectedImageIndex + 1} / {disbursement.images.length}
+                </div>
+              </>
+            )}
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  </>
+)
 }
 

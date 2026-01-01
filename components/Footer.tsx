@@ -36,6 +36,7 @@ export default function Footer() {
             <ul className="space-y-4 text-sm font-bold text-slate-500 dark:text-slate-400">
               <li><Link href="/" className="hover:text-blue-600 transition-colors">Trang chủ</Link></li>
               <li><Link href="/transactions" className="hover:text-blue-600 transition-colors">Xem giao dịch</Link></li>
+              <li><Link href="/disbursements" className="hover:text-blue-600 transition-colors">Nhật ký Giải ngân</Link></li>
               <li><Link href="/donors" className="hover:text-blue-600 transition-colors">Nhà hảo tâm</Link></li>
               <li><Link href="/#donate" className="hover:text-blue-600 transition-colors">Thông tin ủng hộ</Link></li>
             </ul>
