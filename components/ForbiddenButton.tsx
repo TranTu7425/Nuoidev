@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { AlertOctagon, Ghost, Trash2, ZapOff, RefreshCcw, X } from 'lucide-react'
+import { AlertOctagon, Ghost, Trash2, ZapOff, RefreshCcw, X, ImageIcon } from 'lucide-react'
 import { playSound } from '@/lib/sounds'
 import Image from 'next/image'
 
@@ -12,7 +12,68 @@ export default function ForbiddenButton() {
   const [isFlashbanged, setIsFlashbanged] = useState(false)
   const [isRickRolled, setIsRickRolled] = useState(false)
   const [showForgiveButton, setShowForgiveButton] = useState(false)
-  const [buttonPos, setButtonPos] = useState({ x: 0, y: 0 })
+  const [cornerIndex, setCornerIndex] = useState(-1) // -1: initial, 0: top-left, 1: top-right, 2: bottom-left, 3: bottom-right
+
+  const handleRickRoll = useCallback(() => {
+    setIsRickRolled(true)
+    setShowForgiveButton(false)
+    setCornerIndex(-1)
+    
+    // Hiện nút "Tha cho tôi" sau 30 giây
+    setTimeout(() => {
+      setShowForgiveButton(true)
+    }, 30000)
+  }, [])
+
+  const handleReset = useCallback(() => {
+    setIsDying(false)
+    setIsRickRolled(false)
+    setClickCount(0)
+    window.dispatchEvent(new CustomEvent('chaos-mode', { detail: { active: false } }))
+  }, [])
+
+  // INSPECT TRAP LOGIC
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const isInspectKey = 
+        e.key === 'F12' || 
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+        (e.metaKey && e.altKey && e.key === 'i')
+
+      if (isInspectKey) {
+        e.preventDefault()
+        handleRickRoll()
+      }
+    }
+
+    let threshold = 160
+    const handleResize = () => {
+      if (window.outerWidth - window.innerWidth > threshold || 
+          window.outerHeight - window.innerHeight > threshold) {
+        handleRickRoll()
+      }
+    }
+
+    const devtoolsDetector = () => {
+      const start = Date.now()
+      // eslint-disable-next-line no-debugger
+      debugger
+      const end = Date.now()
+      if (end - start > 100) {
+        handleRickRoll()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('resize', handleResize)
+    const interval = setInterval(devtoolsDetector, 2000)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('resize', handleResize)
+      clearInterval(interval)
+    }
+  }, [handleRickRoll])
 
   const messages = [
     "CẤM NHẤN!",
@@ -37,50 +98,23 @@ export default function ForbiddenButton() {
   }
 
   const triggerCatastrophe = () => {
-    // 1. Hiệu ứng Flashbang (choáng)
     setIsFlashbanged(true)
     playSound('EXPLOSION')
     
     setTimeout(() => {
-      // 2. Sau 5 giây, chuyển sang màn hình Critical Error
       setIsFlashbanged(false)
       setIsDying(true)
-      
-      // Kích hoạt rung lắc toàn trang
       window.dispatchEvent(new CustomEvent('chaos-mode', { detail: { active: true } }))
     }, 5000)
   }
 
-  const handleReset = () => {
-    setIsDying(false)
-    setIsRickRolled(false)
-    setClickCount(0)
-    window.dispatchEvent(new CustomEvent('chaos-mode', { detail: { active: false } }))
-  }
-
-  const handleRickRoll = () => {
-    setIsRickRolled(true)
-    setShowForgiveButton(false)
-    setButtonPos({ x: 0, y: 0 })
-    
-    // Hiện nút "Tha cho tôi" sau 30 giây
-    setTimeout(() => {
-      setShowForgiveButton(true)
-    }, 30000)
-  }
-
   const handleButtonHover = () => {
-    if (!showForgiveButton) return
-    
-    // Di chuyển nút ngẫu nhiên khi hover
-    const randomX = Math.random() * 200 - 100 // -100px to 100px
-    const randomY = Math.random() * 100 - 50  // -50px to 50px
-    setButtonPos({ x: randomX, y: randomY })
+    if (!showForgiveButton || cornerIndex >= 3) return
+    setCornerIndex(prev => prev + 1)
   }
 
   return (
     <div className="fixed bottom-24 right-6 z-[250]">
-      {/* Màn hình tối dần theo số lần nhấn */}
       {!isDying && !isFlashbanged && clickCount > 0 && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -116,7 +150,6 @@ export default function ForbiddenButton() {
                 </p>
               </div>
 
-              {/* QR Code khều donate */}
               <motion.div 
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -176,20 +209,33 @@ export default function ForbiddenButton() {
 
               <AnimatePresence>
                 {showForgiveButton && (
-                  <motion.button 
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ 
-                      opacity: 1, 
-                      scale: 1,
-                      x: buttonPos.x,
-                      y: buttonPos.y
+                  <div 
+                    className="fixed z-[600]"
+                    style={{
+                      transition: 'all 0.15s ease-out',
+                      ...(cornerIndex === -1 ? { bottom: '2rem', right: '2rem' } :
+                         cornerIndex === 0 ? { top: '2rem', left: '2rem' } :
+                         cornerIndex === 1 ? { top: '2rem', right: '2rem' } :
+                         cornerIndex === 2 ? { bottom: '2rem', left: '2rem' } :
+                         { bottom: '2rem', right: '2rem' })
                     }}
-                    onMouseEnter={handleButtonHover}
-                    onClick={handleReset}
-                    className="absolute bottom-6 right-6 px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-2xl font-black uppercase tracking-widest transition-all border border-white/20 z-[600]"
                   >
-                    Đủ rồi, tha cho tôi!
-                  </motion.button>
+                    <div 
+                      className="p-12 -m-12 cursor-pointer"
+                      onMouseEnter={handleButtonHover}
+                    >
+                      <motion.button 
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        onClick={() => {
+                          if (cornerIndex === 3) handleReset()
+                        }}
+                        className={`px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-2xl font-black uppercase tracking-widest transition-all border border-white/20 whitespace-nowrap ${cornerIndex < 3 ? 'cursor-default' : 'cursor-pointer'}`}
+                      >
+                        {cornerIndex < 3 ? 'Đang cố tha...' : 'Đủ rồi, tha cho tôi!'}
+                      </motion.button>
+                    </div>
+                  </div>
                 )}
               </AnimatePresence>
             </div>
@@ -211,4 +257,3 @@ export default function ForbiddenButton() {
     </div>
   )
 }
-
