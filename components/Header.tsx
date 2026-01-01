@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Home, History, Users, Heart, Sun, Moon } from 'lucide-react'
+import { Home, History, Users, Heart, Sun, Moon, ReceiptText } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
@@ -12,6 +12,7 @@ const navItems = [
   { name: 'Trang chủ', href: '/', icon: Home },
   { name: 'Xem giao dịch', href: '/transactions', icon: History },
   { name: 'Người ủng hộ', href: '/donors', icon: Users },
+  { name: 'Giải ngân', href: '/disbursements', icon: ReceiptText },
 ]
 
 export default function Header() {

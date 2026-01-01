@@ -42,3 +42,42 @@ model Donor {
   @@index([lastDonationAt])
 }
 
+model Disbursement {
+  id          String     @id @default(cuid())
+  amount      Decimal    @db.Decimal(15, 2)
+  caption     String     @db.Text
+  images      Json       // Lưu mảng URL hình ảnh
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  comments    Comment[]
+  reactions   Reaction[]
+
+  @@map("disbursements")
+  @@index([createdAt])
+}
+
+model Comment {
+  id             String       @id @default(cuid())
+  disbursementId String       @map("disbursement_id")
+  content        String       @db.Text
+  authorName     String       @default("Người dùng ẩn danh") @map("author_name")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  disbursement   Disbursement @relation(fields: [disbursementId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+  @@index([disbursementId])
+  @@index([createdAt])
+}
+
+model Reaction {
+  id             String       @id @default(cuid())
+  disbursementId String       @map("disbursement_id")
+  type           String       @default("heart") // heart, like, etc.
+  ipAddress      String?      @map("ip_address")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  disbursement   Disbursement @relation(fields: [disbursementId], references: [id], onDelete: Cascade)
+
+  @@map("reactions")
+  @@index([disbursementId])
+}
+
