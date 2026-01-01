@@ -26,7 +26,7 @@ export default function ComicSansTakeover() {
       if (isActive) return
       clearTimeout(timeout)
       // Kích hoạt sau 45 giây không hoạt động
-      timeout = setTimeout(triggerTakeover, 45000)
+      timeout = setTimeout(triggerTakeover, 120000)
     }
 
     const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll']

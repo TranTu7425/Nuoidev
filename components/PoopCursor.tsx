@@ -12,6 +12,7 @@ interface TrailItem {
 export default function PoopCursor() {
   const [mousePos, setMousePos] = useState({ x: -100, y: -100 })
   const [isPressed, setIsPressed] = useState(false)
+  const [isCaptchaActive, setIsCaptchaActive] = useState(false)
   const [trail, setTrail] = useState<TrailItem[]>([])
   const trailIdRef = useRef(0)
   const lastPosRef = useRef({ x: 0, y: 0 })
@@ -19,6 +20,12 @@ export default function PoopCursor() {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY })
+      
+      // Kiểm tra xem captcha có đang hoạt động không (qua class trên body)
+      const isCaptcha = document.body.classList.contains('captcha-active')
+      setIsCaptchaActive(isCaptcha)
+
+      if (isCaptcha) return // Không rơi phân khi đang xác thực captcha
       
       // Tính khoảng cách di chuyển từ lần cuối rơi phân
       const dist = Math.hypot(e.clientX - lastPosRef.current.x, e.clientY - lastPosRef.current.y)
@@ -51,7 +58,7 @@ export default function PoopCursor() {
   }, [])
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-[999999] overflow-hidden">
+    <div className={`fixed inset-0 pointer-events-none z-[9000000] overflow-hidden ${isCaptchaActive ? 'hidden' : ''}`}>
       {/* Con trỏ chính */}
       <motion.div 
         className="fixed text-3xl select-none origin-center"
@@ -105,8 +112,21 @@ export default function PoopCursor() {
       </AnimatePresence>
 
       <style dangerouslySetInnerHTML={{ __html: `
-        body, a, button, input, select, textarea, [role="button"] {
+        body:not(.captcha-active), 
+        body:not(.captcha-active) a, 
+        body:not(.captcha-active) button, 
+        body:not(.captcha-active) input, 
+        body:not(.captcha-active) select, 
+        body:not(.captcha-active) textarea, 
+        body:not(.captcha-active) [role="button"] {
           cursor: none !important;
+        }
+        
+        .captcha-active {
+          cursor: default !important;
+        }
+        .captcha-active a, .captcha-active button {
+          cursor: pointer !important;
         }
       ` }} />
     </div>
