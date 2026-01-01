@@ -78,6 +78,10 @@ export default function WelcomeModal() {
                     )
                   },
                   {
+                    icon: <AlertTriangle className="text-rose-500" />,
+                    text: "Cảnh báo: Website có chứa nội dung gây khó chịu cho người dùng, vui lòng cân nhắc kỹ trước khi sử dụng."
+                  },
+                  {
                     icon: <CheckCircle2 className="text-emerald-500" />,
                     text: "Mọi giao dịch donate sẽ được hệ thống Webhook tự động cập nhật và công khai 100% trên bảng sao kê."
                   },
