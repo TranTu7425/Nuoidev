@@ -10,6 +10,9 @@ export default function ForbiddenButton() {
   const [clickCount, setClickCount] = useState(0)
   const [isDying, setIsDying] = useState(false)
   const [isFlashbanged, setIsFlashbanged] = useState(false)
+  const [isRickRolled, setIsRickRolled] = useState(false)
+  const [showForgiveButton, setShowForgiveButton] = useState(false)
+  const [buttonPos, setButtonPos] = useState({ x: 0, y: 0 })
 
   const messages = [
     "CẤM NHẤN!",
@@ -50,8 +53,29 @@ export default function ForbiddenButton() {
 
   const handleReset = () => {
     setIsDying(false)
+    setIsRickRolled(false)
     setClickCount(0)
     window.dispatchEvent(new CustomEvent('chaos-mode', { detail: { active: false } }))
+  }
+
+  const handleRickRoll = () => {
+    setIsRickRolled(true)
+    setShowForgiveButton(false)
+    setButtonPos({ x: 0, y: 0 })
+    
+    // Hiện nút "Tha cho tôi" sau 30 giây
+    setTimeout(() => {
+      setShowForgiveButton(true)
+    }, 30000)
+  }
+
+  const handleButtonHover = () => {
+    if (!showForgiveButton) return
+    
+    // Di chuyển nút ngẫu nhiên khi hover
+    const randomX = Math.random() * 200 - 100 // -100px to 100px
+    const randomY = Math.random() * 100 - 50  // -50px to 50px
+    setButtonPos({ x: randomX, y: randomY })
   }
 
   return (
@@ -121,12 +145,53 @@ export default function ForbiddenButton() {
                   <RefreshCcw size={20} /> Tôi sẽ nạp cà phê ngay!
                 </button>
                 <button
-                  onClick={handleReset}
+                  onClick={handleRickRoll}
                   className="w-full py-3 bg-red-700/50 hover:bg-red-800 text-white/80 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 border border-red-500/30"
                 >
-                  <X size={16} /> Không đấy lêu lêu :P
+                  <RefreshCcw size={16} /> Xem giải pháp khắc phục triệt để
                 </button>
               </div>
+            </div>
+          </motion.div>
+        )}
+
+        {isRickRolled && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[500] bg-black flex items-center justify-center p-4"
+          >
+            <div className="w-full max-w-4xl aspect-video relative rounded-[2rem] overflow-hidden shadow-[0_0_100px_rgba(255,255,255,0.2)]">
+              <iframe 
+                width="100%" 
+                height="100%" 
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0&disablekb=1" 
+                title="Rick Roll" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowFullScreen
+                className="pointer-events-none"
+              ></iframe>
+
+              <AnimatePresence>
+                {showForgiveButton && (
+                  <motion.button 
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ 
+                      opacity: 1, 
+                      scale: 1,
+                      x: buttonPos.x,
+                      y: buttonPos.y
+                    }}
+                    onMouseEnter={handleButtonHover}
+                    onClick={handleReset}
+                    className="absolute bottom-6 right-6 px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-2xl font-black uppercase tracking-widest transition-all border border-white/20 z-[600]"
+                  >
+                    Đủ rồi, tha cho tôi!
+                  </motion.button>
+                )}
+              </AnimatePresence>
             </div>
           </motion.div>
         )}
