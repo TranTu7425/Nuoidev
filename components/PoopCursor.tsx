@@ -9,17 +9,62 @@ interface TrailItem {
   y: number
 }
 
+interface Fly {
+  id: number
+  x: number
+  y: number
+  rotation: number
+  isTargeting: boolean
+}
+
 export default function PoopCursor() {
   const [mousePos, setMousePos] = useState({ x: -100, y: -100 })
   const [isPressed, setIsPressed] = useState(false)
   const [isCaptchaActive, setIsCaptchaActive] = useState(false)
+  const [isIdle, setIsIdle] = useState(false)
   const [trail, setTrail] = useState<TrailItem[]>([])
+  const [flies, setFlies] = useState<Fly[]>([])
+  
   const trailIdRef = useRef(0)
   const lastPosRef = useRef({ x: 0, y: 0 })
+  const idleTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => {
+    // Khởi tạo âm thanh
+    audioRef.current = new Audio('/sounds/fly.m4a')
+    audioRef.current.loop = true
+    audioRef.current.volume = 0.5 // Âm lượng vừa phải
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current = null
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isIdle && !isCaptchaActive) {
+      audioRef.current?.play().catch(err => console.log("Audio play failed:", err))
+    } else {
+      audioRef.current?.pause()
+      if (audioRef.current) audioRef.current.currentTime = 0
+    }
+  }, [isIdle, isCaptchaActive])
+
+  useEffect(() => {
+    const startIdleTimer = () => {
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current)
+      idleTimerRef.current = setTimeout(() => {
+        setIsIdle(true)
+      }, 30000) // 30 giây
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY })
+      setIsIdle(false)
+      startIdleTimer()
       
       // Kiểm tra xem captcha có đang hoạt động không (qua class trên body)
       const isCaptcha = document.body.classList.contains('captcha-active')
@@ -43,25 +88,84 @@ export default function PoopCursor() {
       }
     }
 
-    const handleMouseDown = () => setIsPressed(true)
+    const handleMouseDown = () => {
+      setIsPressed(true)
+      setIsIdle(false)
+      startIdleTimer()
+    }
+    
     const handleMouseUp = () => setIsPressed(false)
 
     window.addEventListener('mousemove', handleMouseMove)
     window.addEventListener('mousedown', handleMouseDown)
     window.addEventListener('mouseup', handleMouseUp)
 
+    startIdleTimer()
+
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('mousedown', handleMouseDown)
       window.removeEventListener('mouseup', handleMouseUp)
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current)
     }
   }, [])
+
+  // Xử lý logic đàn ruồi khi idle
+  useEffect(() => {
+    if (!isIdle) {
+      setFlies([])
+      return
+    }
+
+    // Tạo đàn ruồi ban đầu
+    const initialFlies: Fly[] = Array.from({ length: 15 }).map((_, i) => ({
+      id: i,
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      rotation: Math.random() * 360,
+      isTargeting: i < 5
+    }))
+    setFlies(initialFlies)
+
+    const moveFlies = () => {
+      setFlies(prev => prev.map(fly => {
+        let nextX, nextY
+        
+        if (fly.isTargeting) {
+          // Bay quanh cursor: giật giật mạnh và gần
+          nextX = mousePos.x + (Math.random() - 0.5) * 100
+          nextY = mousePos.y + (Math.random() - 0.5) * 100
+        } else {
+          // Bay tự do: Di chuyển từng đoạn ngắn ngẫu nhiên (Brownian-ish)
+          const angle = (Math.random() * Math.PI * 2)
+          const dist = 50 + Math.random() * 150
+          nextX = fly.x + Math.cos(angle) * dist
+          nextY = fly.y + Math.sin(angle) * dist
+
+          // Giới hạn trong màn hình (bật lại nếu chạm biên)
+          if (nextX < 0 || nextX > window.innerWidth) nextX = fly.x - Math.cos(angle) * dist
+          if (nextY < 0 || nextY > window.innerHeight) nextY = fly.y - Math.sin(angle) * dist
+        }
+
+        // Tính góc xoay để hướng đầu về phía di chuyển
+        const dx = nextX - fly.x
+        const dy = nextY - fly.y
+        const rotation = Math.atan2(dy, dx) * (180 / Math.PI) + 90 // +90 vì ảnh ruồi thường hướng lên
+
+        return { ...fly, x: nextX, y: nextY, rotation }
+      }))
+    }
+
+    // Interval ngắn hơn để tạo cảm giác linh hoạt (200-500ms)
+    const interval = setInterval(moveFlies, 300)
+    return () => clearInterval(interval)
+  }, [isIdle, mousePos])
 
   return (
     <div className={`fixed inset-0 pointer-events-none z-[9000000] overflow-hidden ${isCaptchaActive ? 'hidden' : ''}`}>
       {/* Con trỏ chính */}
       <motion.div 
-        className="fixed text-3xl select-none origin-center"
+        className="fixed text-3xl select-none origin-center z-10"
         animate={{ 
           x: mousePos.x, 
           y: mousePos.y,
@@ -83,6 +187,38 @@ export default function PoopCursor() {
       >
         💩
       </motion.div>
+
+      {/* Đàn ruồi khi idle */}
+      <AnimatePresence>
+        {isIdle && flies.map((fly) => (
+          <motion.div
+            key={fly.id}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ 
+              opacity: 1, 
+              scale: 1,
+              x: fly.x, 
+              y: fly.y,
+              rotate: fly.rotation
+            }}
+            exit={{ opacity: 0, scale: 0 }}
+            transition={{ 
+              x: { type: "spring", stiffness: 200, damping: 15 },
+              y: { type: "spring", stiffness: 200, damping: 15 },
+              rotate: { type: "spring", stiffness: 300, damping: 20 },
+              opacity: { duration: 0.5 }
+            }}
+            className="absolute select-none"
+            style={{ 
+              left: 0, 
+              top: 0,
+              transform: 'translate(-50%, -50%)' 
+            }}
+          >
+            <img src="/images/fly.png" alt="fly" className="w-8 h-8 object-contain" />
+          </motion.div>
+        ))}
+      </AnimatePresence>
 
       {/* Hiệu ứng rơi vãi (Trail) */}
       <AnimatePresence>
