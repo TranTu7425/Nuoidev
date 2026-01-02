@@ -130,6 +130,7 @@ export default function ForbiddenButton() {
     setTimeout(() => {
       setIsFlashbanged(false)
       setIsDying(true)
+      document.body.classList.add('bsod-active')
       window.dispatchEvent(new CustomEvent('chaos-mode', { detail: { active: true } }))
     }, 5000)
   }
@@ -137,6 +138,11 @@ export default function ForbiddenButton() {
   const handleButtonHover = () => {
     if (!showForgiveButton || cornerIndex >= 3) return
     setCornerIndex(prev => prev + 1)
+  }
+
+  const handleResetWithClass = () => {
+    document.body.classList.remove('bsod-active')
+    handleCompleteReset()
   }
 
   return (
@@ -174,7 +180,7 @@ export default function ForbiddenButton() {
                 <p className="text-slate-900 font-black text-xs mt-3 uppercase tracking-widest">Inject Cafe ☕️</p>
               </motion.div>
               <div className="flex flex-col gap-4">
-                <button onClick={handleCompleteReset} className="w-full py-4 bg-white text-red-600 rounded-2xl font-black text-lg shadow-xl">Tôi sẽ nạp ngay!</button>
+                <button onClick={handleResetWithClass} className="w-full py-4 bg-white text-red-600 rounded-2xl font-black text-lg shadow-xl">Tôi sẽ nạp ngay!</button>
                 <button onClick={handleRickRoll} className="w-full py-3 bg-red-700/50 rounded-xl font-bold text-sm">Xem giải pháp triệt để</button>
               </div>
             </div>

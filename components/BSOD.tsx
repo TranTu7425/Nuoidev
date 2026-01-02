@@ -19,9 +19,10 @@ export default function BSOD({ isActive, onClose }: BSODProps) {
       try {
         const docElm = document.documentElement as any
         
-        // Ẩn thanh scroll của toàn bộ trang
+        // Ẩn thanh scroll của toàn bộ trang và thêm class bsod-active
         document.body.style.overflow = 'hidden'
         document.documentElement.style.overflow = 'hidden'
+        document.body.classList.add('bsod-active')
 
         if (docElm.requestFullscreen) {
           await docElm.requestFullscreen()
@@ -77,9 +78,10 @@ export default function BSOD({ isActive, onClose }: BSODProps) {
       window.removeEventListener('contextmenu', handleContextMenu, true)
       clearInterval(interval)
       
-      // Hiện lại thanh scroll
+      // Hiện lại thanh scroll và xóa class bsod-active
       document.body.style.overflow = ''
       document.documentElement.style.overflow = ''
+      document.body.classList.remove('bsod-active')
 
       if (document.fullscreenElement) {
         document.exitFullscreen().catch(() => {})

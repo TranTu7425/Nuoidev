@@ -27,14 +27,16 @@ export default function MosquitoGame() {
   const stunGunAudioRef = useRef<HTMLAudioElement | null>(null)
   const caughtMosquitoIdRef = useRef<number | null>(null)
 
-  // Track captcha state
+  // Track captcha and BSOD state
   useEffect(() => {
-    const checkCaptcha = () => {
-      setIsCaptchaActive(document.body.classList.contains('captcha-active'))
+    const checkBlockingStates = () => {
+      const isCaptcha = document.body.classList.contains('captcha-active')
+      const isBSOD = document.body.classList.contains('bsod-active')
+      setIsCaptchaActive(isCaptcha || isBSOD)
     }
     
-    checkCaptcha()
-    const observer = new MutationObserver(checkCaptcha)
+    checkBlockingStates()
+    const observer = new MutationObserver(checkBlockingStates)
     observer.observe(document.body, { attributes: true, attributeFilter: ['class'] })
     
     return () => observer.disconnect()
