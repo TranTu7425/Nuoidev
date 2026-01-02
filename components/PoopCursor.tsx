@@ -77,11 +77,12 @@ export default function PoopCursor() {
       setIsIdle(false)
       startIdleTimer()
       
-      // Kiểm tra xem captcha có đang hoạt động không (qua class trên body)
+      // Kiểm tra xem captcha hoặc game muỗi có đang hoạt động không
       const isCaptcha = document.body.classList.contains('captcha-active')
-      setIsCaptchaActive(isCaptcha)
+      const isMosquitoGame = document.body.classList.contains('mosquito-game-active')
+      setIsCaptchaActive(isCaptcha || isMosquitoGame)
 
-      if (isCaptcha) return // Không rơi phân khi đang xác thực captcha
+      if (isCaptcha || isMosquitoGame) return // Không rơi phân khi đang chơi game hoặc xác thực
       
       // Tính khoảng cách di chuyển từ lần cuối rơi phân
       const dist = Math.hypot(e.clientX - lastPosRef.current.x, e.clientY - lastPosRef.current.y)
@@ -104,6 +105,9 @@ export default function PoopCursor() {
       setIsIdle(false)
       startIdleTimer()
 
+      // Kiểm tra nếu đang trong game muỗi thì không phát âm thanh của PoopCursor
+      if (document.body.classList.contains('mosquito-game-active')) return
+
       // Phát âm thanh click ngay lập tức
       if (clickAudioRef.current) {
         clickAudioRef.current.currentTime = 0
@@ -123,6 +127,9 @@ export default function PoopCursor() {
     const handleMouseUp = () => {
       setIsPressed(false)
       
+      // Kiểm tra nếu đang trong game muỗi thì không phát âm thanh của PoopCursor
+      if (document.body.classList.contains('mosquito-game-active')) return
+
       // Hủy timer chờ nếu người dùng thả chuột sớm
       if (holdTimerRef.current) {
         clearTimeout(holdTimerRef.current)
@@ -286,20 +293,21 @@ export default function PoopCursor() {
       </AnimatePresence>
 
       <style dangerouslySetInnerHTML={{ __html: `
-        body:not(.captcha-active), 
-        body:not(.captcha-active) a, 
-        body:not(.captcha-active) button, 
-        body:not(.captcha-active) input, 
-        body:not(.captcha-active) select, 
-        body:not(.captcha-active) textarea, 
-        body:not(.captcha-active) [role="button"] {
+        body:not(.captcha-active):not(.mosquito-game-active), 
+        body:not(.captcha-active):not(.mosquito-game-active) a, 
+        body:not(.captcha-active):not(.mosquito-game-active) button, 
+        body:not(.captcha-active):not(.mosquito-game-active) input, 
+        body:not(.captcha-active):not(.mosquito-game-active) select, 
+        body:not(.captcha-active):not(.mosquito-game-active) textarea, 
+        body:not(.captcha-active):not(.mosquito-game-active) [role="button"] {
           cursor: none !important;
         }
         
-        .captcha-active {
+        .captcha-active, .mosquito-game-active {
           cursor: default !important;
         }
-        .captcha-active a, .captcha-active button {
+        .captcha-active a, .captcha-active button,
+        .mosquito-game-active a, .mosquito-game-active button {
           cursor: pointer !important;
         }
       ` }} />

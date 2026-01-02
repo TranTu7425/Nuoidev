@@ -10,6 +10,7 @@ import PoopCursor from "@/components/PoopCursor";
 import ComicSansTakeover from "@/components/ComicSansTakeover";
 import CaptchaWordle from "@/components/CaptchaWordle";
 import BrokenScreen from "@/components/BrokenScreen";
+import MosquitoGame from "@/components/MosquitoGame";
 
 export const metadata: Metadata = {
   title: "Nuoidev - Gây quỹ ủng hộ Developer minh bạch",
@@ -31,6 +32,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <PoopCursor />
+          <MosquitoGame />
           <ComicSansTakeover />
           <CaptchaWordle />
           <BrokenScreen />
