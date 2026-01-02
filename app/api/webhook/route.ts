@@ -63,10 +63,16 @@ export async function POST(request: NextRequest) {
       if (signature) {
         isAuthorized = verifyWebhookSignature(body, signature, secret)
         console.log('HMAC Auth Result:', isAuthorized)
-      } else if (authHeader && authHeader.startsWith('Bearer ')) {
-        const token = authHeader.substring(7)
-        isAuthorized = token === secret
-        console.log('Bearer Token Auth Result:', isAuthorized)
+      } else if (authHeader) {
+        if (authHeader.startsWith('Bearer ')) {
+          const token = authHeader.substring(7)
+          isAuthorized = token === secret
+          console.log('Bearer Token Auth Result:', isAuthorized)
+        } else if (authHeader.startsWith('Apikey ')) {
+          const token = authHeader.substring(7)
+          isAuthorized = token === secret
+          console.log('Apikey Auth Result:', isAuthorized)
+        }
       }
     }
 
@@ -91,6 +97,14 @@ export async function POST(request: NextRequest) {
 
     const rawPayload = parseWebhookPayload(data)
     
+    // Chỉ xử lý giao dịch tiền vào (donations)
+    if (rawPayload.transferType && rawPayload.transferType.toLowerCase() === 'out') {
+      return NextResponse.json(
+        { message: 'Ignoring outgoing transaction' },
+        { status: 200 }
+      )
+    }
+
     // Hàm hỗ trợ trích xuất tên từ nội dung chuyển khoản
     const extractName = (content: string): string | null => {
       if (!content) return null
