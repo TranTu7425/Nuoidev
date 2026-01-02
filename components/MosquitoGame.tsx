@@ -18,11 +18,13 @@ export default function MosquitoGame() {
   const [isPressed, setIsPressed] = useState(false)
   const [isGameActive, setIsGameActive] = useState(false)
   const [isCaptchaActive, setIsCaptchaActive] = useState(false)
+  const [weapon, setWeapon] = useState<'swatter' | 'stungun'>('swatter')
   const [score, setScore] = useState(0)
 
   const buzzAudioRef = useRef<HTMLAudioElement | null>(null)
   const hitAudioRef = useRef<HTMLAudioElement | null>(null)
   const electricAudioRef = useRef<HTMLAudioElement | null>(null)
+  const stunGunAudioRef = useRef<HTMLAudioElement | null>(null)
   const caughtMosquitoIdRef = useRef<number | null>(null)
 
   // Track captcha state
@@ -86,9 +88,13 @@ export default function MosquitoGame() {
     electricAudioRef.current = new Audio('/sounds/votmuoi.MP3')
     electricAudioRef.current.loop = true
 
+    stunGunAudioRef.current = new Audio('/sounds/stungun.m4a')
+    stunGunAudioRef.current.loop = true
+
     return () => {
       buzzAudioRef.current?.pause()
       electricAudioRef.current?.pause()
+      stunGunAudioRef.current?.pause()
     }
   }, [])
 
@@ -99,6 +105,8 @@ export default function MosquitoGame() {
       document.body.classList.add('mosquito-game-active')
     } else {
       buzzAudioRef.current?.pause()
+      electricAudioRef.current?.pause()
+      stunGunAudioRef.current?.pause()
       document.body.classList.remove('mosquito-game-active')
     }
     return () => document.body.classList.remove('mosquito-game-active')
@@ -136,7 +144,7 @@ export default function MosquitoGame() {
   const handleMouseMove = (e: React.MouseEvent) => {
     setMousePos({ x: e.clientX, y: e.clientY })
     
-    // If a mosquito is caught, it follows the swatter
+    // If a mosquito is caught, it follows the weapon
     if (caughtMosquitoIdRef.current !== null) {
       setMosquitoes(prev => prev.map(m => 
         m.id === caughtMosquitoIdRef.current 
@@ -170,15 +178,23 @@ export default function MosquitoGame() {
         hitAudioRef.current.play().catch(() => {})
       }
 
-      // Start electric sound while holding
-      electricAudioRef.current?.play().catch(() => {})
+      // Start hold sound
+      if (weapon === 'swatter') {
+        electricAudioRef.current?.play().catch(() => {})
+      } else {
+        stunGunAudioRef.current?.play().catch(() => {})
+      }
       setScore(s => s + 1)
+    } else if (weapon === 'stungun') {
+      // Súng sốc điện có thể phát âm thanh kể cả khi không trúng muỗi (sốc điện toàn màn hình)
+      stunGunAudioRef.current?.play().catch(() => {})
     }
   }
 
   const handleMouseUp = () => {
     setIsPressed(false)
     electricAudioRef.current?.pause()
+    stunGunAudioRef.current?.pause()
     
     if (caughtMosquitoIdRef.current !== null) {
       const id = caughtMosquitoIdRef.current
@@ -217,9 +233,40 @@ export default function MosquitoGame() {
 
       {isGameActive && (
         <>
+          {/* Flicker/Flash effect for Stun Gun */}
+          <AnimatePresence>
+            {isPressed && weapon === 'stungun' && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 0.4, 0, 0.6, 0.2, 0.5, 0] }}
+                exit={{ opacity: 0 }}
+                transition={{ repeat: Infinity, duration: 0.15 }}
+                className="fixed inset-0 bg-white z-[5] pointer-events-none"
+              />
+            )}
+          </AnimatePresence>
+
           {/* Score Display */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-6 py-2 rounded-full font-black text-2xl backdrop-blur-md border-2 border-white/20 select-none">
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-6 py-2 rounded-full font-black text-2xl backdrop-blur-md border-2 border-white/20 select-none z-[10000001]">
             DIỆT ĐƯỢC: {score} 🦟
+          </div>
+
+          {/* Weapon Switcher */}
+          <div className="absolute top-20 left-1/2 -translate-x-1/2 flex gap-4 z-[10000001] pointer-events-auto">
+            <button 
+              onClick={(e) => { e.stopPropagation(); setWeapon('swatter') }}
+              className={`px-4 py-2 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center gap-2 ${weapon === 'swatter' ? 'bg-yellow-400 text-black scale-110 shadow-lg' : 'bg-white/10 text-white hover:bg-white/20'}`}
+            >
+              <img src="/images/votmuoi.png" alt="" className="w-5 h-5 object-contain" />
+              Vợt Muỗi
+            </button>
+            <button 
+              onClick={(e) => { e.stopPropagation(); setWeapon('stungun') }}
+              className={`px-4 py-2 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center gap-2 ${weapon === 'stungun' ? 'bg-blue-500 text-white scale-110 shadow-lg' : 'bg-white/10 text-white hover:bg-white/20'}`}
+            >
+              <img src="/images/stungun.png" alt="" className="w-5 h-5 object-contain" />
+              Súng Sốc Điện
+            </button>
           </div>
 
           {/* Close Button */}
@@ -230,7 +277,7 @@ export default function MosquitoGame() {
               setMosquitoes([])
               caughtMosquitoIdRef.current = null
             }}
-            className="pointer-events-auto absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all z-[10000000]"
+            className="pointer-events-auto absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all z-[10000001]"
           >
             ❌
           </button>
@@ -247,7 +294,11 @@ export default function MosquitoGame() {
                   x: m.x, 
                   y: m.y,
                   rotate: m.rotation,
-                  filter: m.isCaught ? 'brightness(2) drop-shadow(0 0 10px yellow)' : 'none'
+                  filter: m.isCaught 
+                    ? `brightness(2) drop-shadow(0 0 10px ${weapon === 'swatter' ? 'yellow' : '#3b82f6'})` 
+                    : isPressed && weapon === 'stungun' 
+                      ? 'brightness(1.5) contrast(1.2)' 
+                      : 'none'
                 }}
                 exit={{ opacity: 0, scale: 0 }}
                 transition={{ 
@@ -255,7 +306,7 @@ export default function MosquitoGame() {
                   y: { type: "spring", stiffness: 100, damping: 10 },
                   rotate: { type: "spring", stiffness: 200, damping: 15 }
                 }}
-                className="absolute select-none pointer-events-none"
+                className="absolute select-none pointer-events-none z-10"
                 style={{ 
                   left: 0, 
                   top: 0,
@@ -263,24 +314,24 @@ export default function MosquitoGame() {
                 }}
               >
                 <img src="/images/muoi.png" alt="mosquito" className={`w-12 h-12 object-contain ${m.isDead ? 'grayscale' : ''}`} />
-                {m.isCaught && (
+                {(m.isCaught || (isPressed && weapon === 'stungun')) && (
                   <motion.div 
                     animate={{ scale: [1, 1.5, 1] }}
                     transition={{ repeat: Infinity, duration: 0.1 }}
-                    className="absolute inset-0 bg-yellow-400/30 rounded-full blur-xl"
+                    className={`absolute inset-0 ${weapon === 'swatter' ? 'bg-yellow-400/30' : 'bg-blue-400/40'} rounded-full blur-xl`}
                   />
                 )}
               </motion.div>
             ))}
           </AnimatePresence>
 
-          {/* Swatter Cursor */}
+          {/* Swatter/StunGun Cursor */}
           <motion.div
-            className="fixed pointer-events-none select-none z-10"
+            className="fixed pointer-events-none select-none z-20"
             animate={{ 
               x: mousePos.x, 
               y: mousePos.y,
-              rotate: isPressed ? -20 : 0,
+              rotate: isPressed ? (weapon === 'swatter' ? -20 : -10) : 0,
               scale: isPressed ? 0.9 : 1
             }}
             transition={{
@@ -295,7 +346,11 @@ export default function MosquitoGame() {
               y: '-50%'
             }}
           >
-            <img src="/images/votmuoi.png" alt="swatter" className="w-48 h-48 object-contain" />
+            <img 
+              src={weapon === 'swatter' ? "/images/votmuoi.png" : "/images/stungun.png"} 
+              alt="weapon" 
+              className={`${weapon === 'swatter' ? 'w-48 h-48' : 'w-40 h-40'} object-contain`} 
+            />
           </motion.div>
         </>
       )}
