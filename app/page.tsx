@@ -73,8 +73,8 @@ export default function Home() {
                 transition={{ delay: 0.2 }}
                 className="max-w-2xl mx-auto text-xl md:text-2xl font-bold text-slate-600 dark:text-slate-300 italic"
               >
-                "Cầm tiền thì sợ tiền rơi,<br />
-                Mang đi nuôi dev đời đời ấm no."
+                {"\"Cầm tiền thì sợ tiền rơi,"}<br />
+                {"Mang đi nuôi dev đời đời ấm no.\""}
               </motion.p>
             </ChaosWrapper>
 
@@ -164,7 +164,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-3xl md:text-6xl font-black tracking-tighter mb-4 uppercase flex items-center justify-center gap-4">
-              <HardDrive size={54} className="text-slate-400 hidden md:block" /> SO SÁNH VỚI "PROJECT KHÁC"
+              <HardDrive size={54} className="text-slate-400 hidden md:block" /> {`SO SÁNH VỚI "PROJECT KHÁC"`}
             </h2>
             <div className="h-2 w-24 bg-blue-600 mx-auto rounded-full" />
           </div>
@@ -319,7 +319,7 @@ export default function Home() {
               <Mic2 size={48} className="hidden md:block" /> TÂM THƯ CỦA DEV
             </h2>
             <p className="text-xl md:text-2xl font-bold text-slate-600 dark:text-slate-300 leading-relaxed italic">
-              "Trong thế giới mà Bug nhiều hơn tính năng, Tôi xin cam kết: HÃY NUÔI DEV!"
+              {"\"Trong thế giới mà Bug nhiều hơn tính năng, Tôi xin cam kết: HÃY NUÔI DEV!\""}
             </p>
             <p className="text-lg font-medium text-slate-500 leading-relaxed flex items-center justify-center gap-2">
               Dev nghèo, Dev cần cà phê để thức đêm, nhưng Dev KHÔNG BAO GIỜ gian lận Logic! Mỗi đồng các bạn gửi, Dev sẽ Optimize Resource đến mức tối đa!

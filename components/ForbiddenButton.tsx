@@ -174,7 +174,7 @@ export default function ForbiddenButton() {
               <div className="space-y-4">
                 <ZapOff size={80} className="mx-auto animate-bounce text-yellow-300" />
                 <h1 className="text-5xl font-black uppercase tracking-tighter">Critical Error</h1>
-                <p className="text-xl font-bold italic opacity-90">"Hệ thống sụp đổ vì bạn. Nạp cà phê hoặc giải đố để khôi phục!"</p>
+                <p className="text-xl font-bold italic opacity-90">{"\"Hệ thống sụp đổ vì bạn. Nạp cà phê hoặc giải đố để khôi phục!\""}</p>
               </div>
               <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5 }} className="bg-white p-4 rounded-[2rem] shadow-2xl inline-block">
                 <div className="relative w-48 h-48 mx-auto overflow-hidden rounded-xl">
@@ -271,7 +271,7 @@ export default function ForbiddenButton() {
               
               <div className="space-y-2">
                 <h2 className="text-5xl font-black uppercase tracking-tighter">Quý lắm mới tha cho đó!</h2>
-                <p className="text-xl font-bold opacity-90 italic">"Lần sau đừng có mà lì lợm nữa nghe chưa :P"</p>
+                <p className="text-xl font-bold opacity-90 italic">{"\"Lần sau đừng có mà lì lợm nữa nghe chưa :P\""}</p>
               </div>
 
               <div className="bg-white p-6 rounded-[3rem] shadow-2xl inline-block relative overflow-hidden group">

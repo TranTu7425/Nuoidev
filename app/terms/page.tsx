@@ -116,7 +116,7 @@ export default function TermsPage() {
           </div>
           <h3 className="text-3xl font-black uppercase tracking-tight">Xác nhận chấp thuận</h3>
           <p className="text-slate-400 font-medium leading-relaxed max-w-xl mx-auto italic">
-            "Bằng việc tiếp tục truy cập website và thực hiện donate, bạn xác nhận đã đọc, hiểu và đồng ý hoàn toàn với các điều khoản nêu trên."
+            {"\"Bằng việc tiếp tục truy cập website và thực hiện donate, bạn xác nhận đã đọc, hiểu và đồng ý hoàn toàn với các điều khoản nêu trên.\""}
           </p>
           <div className="pt-4">
             <Link 

@@ -159,7 +159,7 @@ export default function StatsDashboard() {
                     </p>
                     {tx.message && (
                       <p className="text-[10px] text-slate-400 italic max-w-[150px] truncate">
-                        "{tx.message}"
+                        {`"${tx.message}"`}
                       </p>
                     )}
                   </div>

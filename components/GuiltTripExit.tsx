@@ -65,7 +65,7 @@ export default function GuiltTripExit() {
                 Bạn đi thật sao?
               </h2>
               <p className="text-lg font-bold text-slate-600 dark:text-slate-400 italic leading-relaxed">
-                "Dev vừa mới bóc gói mì tôm cuối cùng... Thôi bạn đi đi, mình không sao đâu, mình quen với cái đói rồi..."
+                {"\"Dev vừa mới bóc gói mì tôm cuối cùng... Thôi bạn đi đi, mình không sao đâu, mình quen với cái đói rồi...\""}
               </p>
               <p className="text-xs font-black text-blue-500 uppercase tracking-widest flex items-center justify-center gap-2">
                 Cảnh báo: Rời đi có thể gây cắn rứt lương tâm nhẹ

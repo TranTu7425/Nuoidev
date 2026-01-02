@@ -105,7 +105,7 @@ export default function TransactionList({ realtime = true }) {
                   {tx.message && (
                     <div className="mt-3 p-3 bg-blue-50/50 dark:bg-blue-900/10 rounded-xl border border-blue-100/50 dark:border-blue-900/20 text-slate-600 dark:text-slate-300 flex gap-2 italic">
                       <MessageCircle size={16} className="shrink-0 text-blue-400 mt-1" />
-                      <p className="text-sm">"{tx.message}"</p>
+                      <p className="text-sm">{`"${tx.message}"`}</p>
                     </div>
                   )}
                 </div>

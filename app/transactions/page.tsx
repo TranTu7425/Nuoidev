@@ -48,7 +48,7 @@ export default function TransactionsPage() {
                 <h1 className="text-4xl md:text-5xl font-black tracking-tight uppercase">Check Logs Realtime</h1>
               </div>
               <p className="text-xl text-slate-500 max-w-2xl">
-                Danh sách chi tiết các lệnh "Deploy Cơm" được Webhook xác thực tự động.
+                {`Danh sách chi tiết các lệnh "Deploy Cơm" được Webhook xác thực tự động.`}
               </p>
             </div>
 

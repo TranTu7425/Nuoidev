@@ -139,7 +139,7 @@ export default function TransactionNotification() {
                 
                 {tx.message && (
                   <p className="text-xs text-slate-500 dark:text-slate-400 italic line-clamp-2 mt-2 leading-relaxed">
-                    "{tx.message}"
+                    {`"${tx.message}"`}
                   </p>
                 )}
               </div>
