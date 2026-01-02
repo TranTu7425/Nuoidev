@@ -8,11 +8,12 @@ export default function CoffeeRain() {
 
   useEffect(() => {
     const triggerRain = () => {
+      const moneyIcons = ['💸', '💰', '💵', '🤑', '🪙']
       const newItems = Array.from({ length: 20 }).map((_, i) => ({
         id: Date.now() + i,
         left: Math.random() * 100,
         duration: 2 + Math.random() * 3,
-        icon: Math.random() > 0.5 ? '☕️' : '🫘'
+        icon: moneyIcons[Math.floor(Math.random() * moneyIcons.length)]
       }))
       
       setItems(prev => [...prev, ...newItems])
