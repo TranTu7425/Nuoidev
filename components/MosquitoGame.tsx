@@ -17,12 +17,26 @@ export default function MosquitoGame() {
   const [mousePos, setMousePos] = useState({ x: -100, y: -100 })
   const [isPressed, setIsPressed] = useState(false)
   const [isGameActive, setIsGameActive] = useState(false)
+  const [isCaptchaActive, setIsCaptchaActive] = useState(false)
   const [score, setScore] = useState(0)
 
   const buzzAudioRef = useRef<HTMLAudioElement | null>(null)
   const hitAudioRef = useRef<HTMLAudioElement | null>(null)
   const electricAudioRef = useRef<HTMLAudioElement | null>(null)
   const caughtMosquitoIdRef = useRef<number | null>(null)
+
+  // Track captcha state
+  useEffect(() => {
+    const checkCaptcha = () => {
+      setIsCaptchaActive(document.body.classList.contains('captcha-active'))
+    }
+    
+    checkCaptcha()
+    const observer = new MutationObserver(checkCaptcha)
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] })
+    
+    return () => observer.disconnect()
+  }, [])
 
   // Spawning mosquitoes
   useEffect(() => {
@@ -187,16 +201,17 @@ export default function MosquitoGame() {
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
-      {/* Start Button (optional or for testing) */}
-      {!isGameActive && (
+      {/* Start Button */}
+      {!isGameActive && !isCaptchaActive && (
         <button 
           onClick={(e) => {
             e.stopPropagation()
             setIsGameActive(true)
           }}
-          className="pointer-events-auto absolute top-4 right-20 px-4 py-2 bg-red-600 text-white font-bold rounded-lg shadow-lg hover:bg-red-700 transition-colors z-[10000000]"
+          className="pointer-events-auto fixed bottom-[160px] right-6 px-4 py-3 bg-red-600 text-white font-black text-xs uppercase tracking-widest rounded-2xl shadow-2xl hover:bg-red-700 transition-all hover:scale-110 active:scale-95 z-[260] flex items-center gap-2 border-4 border-red-500/20"
         >
-          🎮 CHƠI VỢT MUỖI
+          <img src="/images/muoi.png" alt="" className="w-5 h-5 invert brightness-0" />
+          CHƠI VỢT MUỖI
         </button>
       )}
 

@@ -33,6 +33,21 @@ export default function PoopCursor() {
   const clickAudioRef = useRef<HTMLAudioElement | null>(null)
   const holdAudioRef = useRef<HTMLAudioElement | null>(null)
 
+  // Đồng bộ trạng thái captcha/game muỗi
+  useEffect(() => {
+    const checkActiveStates = () => {
+      const isCaptcha = document.body.classList.contains('captcha-active')
+      const isMosquitoGame = document.body.classList.contains('mosquito-game-active')
+      setIsCaptchaActive(isCaptcha || isMosquitoGame)
+    }
+
+    checkActiveStates()
+    const observer = new MutationObserver(checkActiveStates)
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] })
+
+    return () => observer.disconnect()
+  }, [])
+
   useEffect(() => {
     // Khởi tạo âm thanh ruồi
     audioRef.current = new Audio('/sounds/fly.m4a')
@@ -77,12 +92,9 @@ export default function PoopCursor() {
       setIsIdle(false)
       startIdleTimer()
       
-      // Kiểm tra xem captcha hoặc game muỗi có đang hoạt động không
-      const isCaptcha = document.body.classList.contains('captcha-active')
-      const isMosquitoGame = document.body.classList.contains('mosquito-game-active')
-      setIsCaptchaActive(isCaptcha || isMosquitoGame)
-
-      if (isCaptcha || isMosquitoGame) return // Không rơi phân khi đang chơi game hoặc xác thực
+      const isBlocked = document.body.classList.contains('captcha-active') || 
+                        document.body.classList.contains('mosquito-game-active')
+      if (isBlocked) return // Không rơi phân khi đang chơi game hoặc xác thực
       
       // Tính khoảng cách di chuyển từ lần cuối rơi phân
       const dist = Math.hypot(e.clientX - lastPosRef.current.x, e.clientY - lastPosRef.current.y)
@@ -105,8 +117,10 @@ export default function PoopCursor() {
       setIsIdle(false)
       startIdleTimer()
 
-      // Kiểm tra nếu đang trong game muỗi thì không phát âm thanh của PoopCursor
-      if (document.body.classList.contains('mosquito-game-active')) return
+      // Kiểm tra nếu đang trong game muỗi hoặc captcha thì không phát âm thanh của PoopCursor
+      const isBlocked = document.body.classList.contains('captcha-active') || 
+                        document.body.classList.contains('mosquito-game-active')
+      if (isBlocked) return
 
       // Phát âm thanh click ngay lập tức
       if (clickAudioRef.current) {
@@ -127,8 +141,10 @@ export default function PoopCursor() {
     const handleMouseUp = () => {
       setIsPressed(false)
       
-      // Kiểm tra nếu đang trong game muỗi thì không phát âm thanh của PoopCursor
-      if (document.body.classList.contains('mosquito-game-active')) return
+      // Kiểm tra nếu đang trong game muỗi hoặc captcha thì không phát âm thanh của PoopCursor
+      const isBlocked = document.body.classList.contains('captcha-active') || 
+                        document.body.classList.contains('mosquito-game-active')
+      if (isBlocked) return
 
       // Hủy timer chờ nếu người dùng thả chuột sớm
       if (holdTimerRef.current) {
