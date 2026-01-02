@@ -1,6 +1,8 @@
 import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/db'
 
+export const dynamic = 'force-dynamic'
+
 // Server-Sent Events endpoint cho real-time updates
 export async function GET(request: NextRequest) {
   const encoder = new TextEncoder()
