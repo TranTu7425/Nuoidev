@@ -14,7 +14,10 @@ const TOXIC_MESSAGES = [
   "Nghèo thì lâu chứ giàu thì mấy? Donate đi rồi đời sẽ khác (hoặc không). 📉",
   "Tôi thấy bạn đang cuộn chuột rất nhiều. Đang tìm chỗ nào không có nút Donate à? Vô ích thôi! 🔍",
   "Lương Dev tháng này phụ thuộc vào sự hào phóng (hoặc tội lỗi) của bạn đấy. ☕",
-  "Bạn có biết mỗi lần bạn không donate, một con bug lại được sinh ra không? 🐛"
+  "Bạn có biết mỗi lần bạn không donate, một con bug lại được sinh ra không? 🐛",
+  "Sao xi nhan bên phải, mà chị đi sang trái. Cho tôi xem giấy tờ, và đưa xe vào lề...",
+  "Chị ơi, chị đang đi theo hướng nào vậy? Chị đi sang trái mà lại nhấn nút donate bên phải. 🤔",
+  "Code của tôi nhìn như đống 💩, đừng có cố mà kiểm tra làm gì. 💩",
 ]
 
 const IDLE_MESSAGES = [
@@ -54,15 +57,30 @@ export default function ToxicClippy() {
     // Lắng nghe các sự kiện đặc biệt
     const handleChaos = () => showRandomMessage(["Thấy chưa? Tôi đã bảo là đừng có nghịch dại mà! 💥"])
     const handleCaptcha = () => showRandomMessage(["Xác thực đi, hay là bạn cũng chỉ là một con bot nghèo nàn? 🤖"])
+    const handleInspect = (e: MouseEvent | KeyboardEvent) => {
+      // Nếu là chuột phải hoặc phím tắt Inspect
+      if (e.type === 'contextmenu') {
+        showRandomMessage(["Code của tôi nhìn như đống 💩, đừng có cố mà kiểm tra làm gì. 💩"])
+      } else if (e instanceof KeyboardEvent) {
+        const isInspectKey = e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.metaKey && e.altKey && e.key === 'i')
+        if (isInspectKey) {
+          showRandomMessage(["Đã bảo là đừng có Inspect mà, code thối lắm không ngửi được đâu! 💩"])
+        }
+      }
+    }
     
     window.addEventListener('chaos-mode', handleChaos)
     window.addEventListener('captcha-active', handleCaptcha)
+    window.addEventListener('contextmenu', handleInspect)
+    window.addEventListener('keydown', handleInspect)
 
     return () => {
       clearTimeout(initialTimer)
       clearInterval(randomTimer)
       window.removeEventListener('chaos-mode', handleChaos)
       window.removeEventListener('captcha-active', handleCaptcha)
+      window.removeEventListener('contextmenu', handleInspect)
+      window.removeEventListener('keydown', handleInspect)
     }
   }, [isVisible, showRandomMessage])
 
@@ -81,6 +99,8 @@ export default function ToxicClippy() {
               <button 
                 onClick={() => setIsVisible(false)}
                 className="absolute top-2 right-2 p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors"
+                title="Đóng"
+                aria-label="Đóng lời thoại"
               >
                 <X size={14} />
               </button>
@@ -102,6 +122,9 @@ export default function ToxicClippy() {
               }}
               className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center shadow-xl border-4 border-white cursor-help group relative ml-auto"
               onClick={() => showRandomMessage()}
+              role="button"
+              aria-label="Clippy Toxic"
+              title="Nhấn để nghe chửi"
             >
               <span className="text-4xl select-none">📎</span>
               <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-ping" />
@@ -118,6 +141,8 @@ export default function ToxicClippy() {
             whileHover={{ opacity: 1, scale: 1.1 }}
             onClick={() => showRandomMessage()}
             className="pointer-events-auto w-10 h-10 bg-slate-200 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-500 shadow-lg border-2 border-white"
+            title="Mở trợ lý"
+            aria-label="Mở trợ lý Clippy"
           >
             <MessageSquare size={18} />
           </motion.button>
