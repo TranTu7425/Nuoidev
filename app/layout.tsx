@@ -12,6 +12,7 @@ import CaptchaWordle from "@/components/CaptchaWordle";
 import BrokenScreen from "@/components/BrokenScreen";
 import MosquitoGame from "@/components/MosquitoGame";
 import ToxicClippy from "@/components/ToxicClippy";
+import GuiltTripExit from "@/components/GuiltTripExit";
 
 export const metadata: Metadata = {
   title: "Nuoidev - Gây quỹ ủng hộ Developer minh bạch",
@@ -35,6 +36,7 @@ export default function RootLayout({
           <PoopCursor />
           <MosquitoGame />
           <ToxicClippy />
+          <GuiltTripExit />
           <ComicSansTakeover />
           <CaptchaWordle />
           <BrokenScreen />
