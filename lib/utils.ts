@@ -44,3 +44,12 @@ export function formatDateShort(date: Date | string): string {
   }).format(d)
 }
 
+/**
+ * Ẩn một phần số tài khoản để bảo mật
+ */
+export function maskAccount(account: string | null | undefined): string {
+  if (!account) return 'Ẩn danh'
+  if (account.length <= 4) return '****'
+  return account.slice(0, 2) + '****' + account.slice(-2)
+}
+

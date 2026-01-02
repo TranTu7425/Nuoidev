@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { formatCurrency, formatDateShort } from '@/lib/utils'
-import { maskAccount } from '@/lib/webhook'
+import { formatCurrency, formatDateShort, maskAccount } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ExternalLink, MessageCircle, ShieldCheck, ChevronDown } from 'lucide-react'
 

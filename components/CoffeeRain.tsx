@@ -35,7 +35,7 @@ export default function CoffeeRain() {
             key={item.id}
             initial={{ y: -100, opacity: 0, rotate: 0 }}
             animate={{ 
-              y: window.innerHeight + 100, 
+              y: typeof window !== 'undefined' ? window.innerHeight + 100 : 1000, 
               opacity: [0, 1, 1, 0],
               rotate: 360 * 2
             }}
