@@ -28,25 +28,36 @@ export default function PoopCursor() {
   const trailIdRef = useRef(0)
   const lastPosRef = useRef({ x: 0, y: 0 })
   const idleTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const holdTimerRef = useRef<NodeJS.Timeout | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const clickAudioRef = useRef<HTMLAudioElement | null>(null)
+  const holdAudioRef = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => {
-    // Khởi tạo âm thanh
+    // Khởi tạo âm thanh ruồi
     audioRef.current = new Audio('/sounds/fly.m4a')
     audioRef.current.loop = true
-    audioRef.current.volume = 0.5 // Âm lượng vừa phải
+    audioRef.current.volume = 0.5
+
+    // Khởi tạo âm thanh nhấn chuột
+    clickAudioRef.current = new Audio('/sounds/poop.MP3')
+    holdAudioRef.current = new Audio('/sounds/fart1.MP3')
+    holdAudioRef.current.loop = true
 
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause()
-        audioRef.current = null
-      }
+      audioRef.current?.pause()
+      clickAudioRef.current?.pause()
+      holdAudioRef.current?.pause()
+      audioRef.current = null
+      clickAudioRef.current = null
+      holdAudioRef.current = null
+      if (holdTimerRef.current) clearTimeout(holdTimerRef.current)
     }
   }, [])
 
   useEffect(() => {
     if (isIdle && !isCaptchaActive) {
-      audioRef.current?.play().catch(err => console.log("Audio play failed:", err))
+      audioRef.current?.play().catch(() => {})
     } else {
       audioRef.current?.pause()
       if (audioRef.current) audioRef.current.currentTime = 0
@@ -92,9 +103,36 @@ export default function PoopCursor() {
       setIsPressed(true)
       setIsIdle(false)
       startIdleTimer()
+
+      // Phát âm thanh click ngay lập tức
+      if (clickAudioRef.current) {
+        clickAudioRef.current.currentTime = 0
+        clickAudioRef.current.play().catch(() => {})
+      }
+      
+      // Đợi 200ms, nếu vẫn đang giữ chuột thì mới phát tiếng fart1
+      if (holdTimerRef.current) clearTimeout(holdTimerRef.current)
+      holdTimerRef.current = setTimeout(() => {
+        if (holdAudioRef.current) {
+          holdAudioRef.current.currentTime = 0
+          holdAudioRef.current.play().catch(() => {})
+        }
+      }, 200) // Trễ 200ms để phân biệt giữa click nhanh và nhấn giữ
     }
     
-    const handleMouseUp = () => setIsPressed(false)
+    const handleMouseUp = () => {
+      setIsPressed(false)
+      
+      // Hủy timer chờ nếu người dùng thả chuột sớm
+      if (holdTimerRef.current) {
+        clearTimeout(holdTimerRef.current)
+      }
+
+      // Dừng âm thanh giữ
+      if (holdAudioRef.current) {
+        holdAudioRef.current.pause()
+      }
+    }
 
     window.addEventListener('mousemove', handleMouseMove)
     window.addEventListener('mousedown', handleMouseDown)
