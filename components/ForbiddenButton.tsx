@@ -25,6 +25,9 @@ export default function ForbiddenButton() {
     setShowForgiveButton(false)
     setCornerIndex(-1)
     
+    // Thông báo cho Clippy
+    window.dispatchEvent(new CustomEvent('rick-roll-active'))
+    
     setTimeout(() => {
       setShowForgiveButton(true)
     }, 30000)

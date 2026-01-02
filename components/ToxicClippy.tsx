@@ -44,7 +44,7 @@ const TOXIC_MESSAGES = [
   "Web này miễn phí vì Dev còn hy vọng… vào bạn. 🥲",
   "Đừng sợ donate, nó không cắn đâu. Chỉ trừ ví tiền của bạn. 🦷",
   "Nếu không donate, ít nhất hãy thừa nhận là bạn keo đi. Trung thực lên nào. 🪞",
-  "Bạn đang dùng dark mode à? Chuẩn rồi, hợp với tương lai tài chính của Dev đấy. 🌑",
+  "Bạn đang dùng dark mode à? Chuẩn rồi, tối như tiền đồ chị Dậu. 🌑",
 ]
 
 const IDLE_MESSAGES = [
@@ -84,6 +84,7 @@ export default function ToxicClippy() {
     // Lắng nghe các sự kiện đặc biệt
     const handleChaos = () => showRandomMessage(["Thấy chưa? Tôi đã bảo là đừng có nghịch dại mà! 💥"])
     const handleCaptcha = () => showRandomMessage(["Xác thực đi, hay là bạn cũng chỉ là một con bot nghèo nàn? 🤖"])
+    const handleRickRollEvent = () => showRandomMessage(["HAHAHA bị Rick Roll rồi, chịu khó nghe nhé vì mình thấy nghe nhiều cũng hay. 🎵"])
     const handleInspect = (e: MouseEvent | KeyboardEvent) => {
       // Nếu là chuột phải hoặc phím tắt Inspect
       if (e.type === 'contextmenu') {
@@ -98,6 +99,7 @@ export default function ToxicClippy() {
     
     window.addEventListener('chaos-mode', handleChaos)
     window.addEventListener('captcha-active', handleCaptcha)
+    window.addEventListener('rick-roll-active', handleRickRollEvent)
     window.addEventListener('contextmenu', handleInspect)
     window.addEventListener('keydown', handleInspect)
 
@@ -106,6 +108,7 @@ export default function ToxicClippy() {
       clearInterval(randomTimer)
       window.removeEventListener('chaos-mode', handleChaos)
       window.removeEventListener('captcha-active', handleCaptcha)
+      window.removeEventListener('rick-roll-active', handleRickRollEvent)
       window.removeEventListener('contextmenu', handleInspect)
       window.removeEventListener('keydown', handleInspect)
     }
