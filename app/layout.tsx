@@ -17,6 +17,9 @@ import GuiltTripExit from "@/components/GuiltTripExit";
 export const metadata: Metadata = {
   title: "Nuoidev - Gây quỹ ủng hộ Developer minh bạch",
   description: "Trang web gây quỹ minh bạch và công khai, tự động xác thực qua hệ thống Webhook ngân hàng.",
+  icons: {
+    icon: "/images/favicon.ico",
+  },
 };
 
 export default function RootLayout({
