@@ -225,8 +225,10 @@ export default function AdminDisbursementsPage() {
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-black uppercase tracking-widest text-slate-400">Số tiền giải ngân (VND)</label>
+                    <label htmlFor="disbursement-amount" className="text-xs font-black uppercase tracking-widest text-slate-400">Số tiền giải ngân (VND)</label>
                     <input 
+                      id="disbursement-amount"
+                      name="disbursement-amount"
                       required
                       type="number"
                       placeholder="VD: 500000"
@@ -237,8 +239,10 @@ export default function AdminDisbursementsPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-xs font-black uppercase tracking-widest text-slate-400">Nội dung giải ngân</label>
+                    <label htmlFor="disbursement-caption" className="text-xs font-black uppercase tracking-widest text-slate-400">Nội dung giải ngân</label>
                     <textarea 
+                      id="disbursement-caption"
+                      name="disbursement-caption"
                       required
                       placeholder="Mô tả mục đích sử dụng số tiền này..."
                       value={caption}
@@ -248,11 +252,13 @@ export default function AdminDisbursementsPage() {
                   </div>
 
                   <div className="space-y-4">
-                    <label className="text-xs font-black uppercase tracking-widest text-slate-400 flex justify-between">
+                    <label htmlFor="disbursement-files" className="text-xs font-black uppercase tracking-widest text-slate-400 flex justify-between">
                       Hình ảnh chứng từ
                     </label>
                     
                     <input 
+                      id="disbursement-files"
+                      name="disbursement-files"
                       type="file"
                       multiple
                       accept="image/*"

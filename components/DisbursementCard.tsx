@@ -175,26 +175,37 @@ export default function DisbursementCard({ disbursement }: { disbursement: Disbu
             >
               {/* Comment Form */}
               <form onSubmit={submitComment} className="space-y-2">
-                <input 
-                  type="text"
-                  placeholder="Tên của bạn (tùy chọn)..."
-                  value={authorName}
-                  onChange={(e) => setAuthorName(e.target.value)}
-                  className="w-full px-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl outline-none focus:border-blue-500 transition-all"
-                />
-                <div className="relative">
-                  <textarea 
-                    placeholder="Viết bình luận..."
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    className="w-full px-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl outline-none focus:border-blue-500 transition-all min-h-[80px]"
+                <div className="space-y-1">
+                  <label htmlFor={`author-name-${disbursement.id}`} className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Tên của bạn</label>
+                  <input 
+                    id={`author-name-${disbursement.id}`}
+                    name="author-name"
+                    type="text"
+                    placeholder="Tên của bạn (tùy chọn)..."
+                    value={authorName}
+                    onChange={(e) => setAuthorName(e.target.value)}
+                    className="w-full px-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl outline-none focus:border-blue-500 transition-all"
                   />
-                  <button 
-                    type="submit"
-                    className="absolute bottom-3 right-3 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    <Send size={16} />
-                  </button>
+                </div>
+                <div className="space-y-1">
+                  <label htmlFor={`comment-content-${disbursement.id}`} className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Nội dung bình luận</label>
+                  <div className="relative">
+                    <textarea 
+                      id={`comment-content-${disbursement.id}`}
+                      name="comment-content"
+                      placeholder="Viết bình luận..."
+                      value={newComment}
+                      onChange={(e) => setNewComment(e.target.value)}
+                      className="w-full px-4 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl outline-none focus:border-blue-500 transition-all min-h-[80px]"
+                    />
+                    <button 
+                      type="submit"
+                      className="absolute bottom-3 right-3 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      aria-label="Gửi bình luận"
+                    >
+                      <Send size={16} />
+                    </button>
+                  </div>
                 </div>
               </form>
 

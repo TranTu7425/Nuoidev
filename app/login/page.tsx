@@ -56,30 +56,40 @@ export default function LoginPage() {
             </div>
 
             <form onSubmit={handleLogin} className="w-full space-y-4">
-              <div className="space-y-4">
-                <div className="relative">
-                  <KeyRound size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input 
-                    autoFocus
-                    required
-                    type="password"
-                    placeholder="Mật khẩu Admin"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-12 pr-6 py-4 bg-slate-100 dark:bg-slate-900 border-2 border-transparent focus:border-blue-600 rounded-2xl outline-none transition-all font-medium"
-                  />
+              <div className="space-y-4 text-left">
+                <div className="space-y-2">
+                  <label htmlFor="admin-password" className="text-xs font-black uppercase tracking-widest text-slate-400 ml-2">Mật khẩu hệ thống</label>
+                  <div className="relative">
+                    <KeyRound size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input 
+                      id="admin-password"
+                      name="admin-password"
+                      autoFocus
+                      required
+                      type="password"
+                      placeholder="Mật khẩu Admin"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full pl-12 pr-6 py-4 bg-slate-100 dark:bg-slate-900 border-2 border-transparent focus:border-blue-600 rounded-2xl outline-none transition-all font-medium"
+                    />
+                  </div>
                 </div>
 
-                <div className="relative">
-                  <Lock size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input 
-                    required
-                    type="password"
-                    placeholder="Mã truy cập bí mật (Access Key)"
-                    value={accessKey}
-                    onChange={(e) => setAccessKey(e.target.value)}
-                    className="w-full pl-12 pr-6 py-4 bg-slate-100 dark:bg-slate-900 border-2 border-transparent focus:border-blue-600 rounded-2xl outline-none transition-all font-medium"
-                  />
+                <div className="space-y-2">
+                  <label htmlFor="access-key" className="text-xs font-black uppercase tracking-widest text-slate-400 ml-2">Mã truy cập (Access Key)</label>
+                  <div className="relative">
+                    <Lock size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input 
+                      id="access-key"
+                      name="access-key"
+                      required
+                      type="password"
+                      placeholder="Mã truy cập bí mật (Access Key)"
+                      value={accessKey}
+                      onChange={(e) => setAccessKey(e.target.value)}
+                      className="w-full pl-12 pr-6 py-4 bg-slate-100 dark:bg-slate-900 border-2 border-transparent focus:border-blue-600 rounded-2xl outline-none transition-all font-medium"
+                    />
+                  </div>
                 </div>
               </div>
 
