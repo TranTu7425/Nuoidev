@@ -14,6 +14,11 @@ export async function GET(request: NextRequest) {
           }
         },
         reactions: {
+          select: {
+            id: true,
+            type: true,
+            createdAt: true
+          },
           take: 5 // Lấy một vài reaction gần nhất để hiển thị demo
         }
       },

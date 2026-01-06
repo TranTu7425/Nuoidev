@@ -27,6 +27,17 @@ export async function GET(request: NextRequest) {
                 gt: lastCheck,
               },
             },
+            select: {
+              id: true,
+              transactionId: true,
+              amount: true,
+              senderName: true,
+              senderAccount: true,
+              message: true,
+              status: true,
+              verifiedAt: true,
+              createdAt: true,
+            },
             orderBy: { createdAt: 'desc' },
           })
 
@@ -34,10 +45,13 @@ export async function GET(request: NextRequest) {
           controller.enqueue(encoder.encode(': heartbeat\n\n'))
 
           if (newTransactions.length > 0) {
-            // Convert Decimal to Number for JSON serialization
+            // Convert Decimal to Number and mask senderAccount
             const serializedTransactions = newTransactions.map(tx => ({
               ...tx,
-              amount: Number(tx.amount)
+              amount: Number(tx.amount),
+              senderAccount: tx.senderAccount 
+                ? tx.senderAccount.slice(0, 2) + '****' + tx.senderAccount.slice(-2)
+                : 'Ẩn danh'
             }))
 
             controller.enqueue(

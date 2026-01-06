@@ -10,12 +10,21 @@ export async function POST(
     const { type } = await request.json()
     const ip = request.headers.get('x-forwarded-for') || '127.0.0.1'
 
+    // Validate reaction type
+    const allowedTypes = ['heart', 'like', 'laugh', 'wow', 'sad', 'angry']
+    const reactionType = allowedTypes.includes(type) ? type : 'heart'
+
     // Tạo reaction mới
     const reaction = await prisma.reaction.create({
       data: {
         disbursementId: id,
-        type: type || 'heart',
+        type: reactionType,
         ipAddress: ip
+      },
+      select: {
+        id: true,
+        type: true,
+        createdAt: true
       }
     })
 

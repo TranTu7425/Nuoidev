@@ -21,6 +21,17 @@ export async function GET(request: NextRequest) {
     const [transactions, total] = await Promise.all([
       prisma.transaction.findMany({
         where,
+        select: {
+          id: true,
+          transactionId: true,
+          amount: true,
+          senderName: true,
+          senderAccount: true, // Chúng ta vẫn lấy nhưng sẽ mask trên frontend, hoặc mask ở đây
+          message: true,
+          status: true,
+          verifiedAt: true,
+          createdAt: true,
+        },
         orderBy: { createdAt: 'desc' },
         skip,
         take: limit,
@@ -28,8 +39,16 @@ export async function GET(request: NextRequest) {
       prisma.transaction.count({ where }),
     ])
 
+    // Mask senderAccount before sending to client
+    const maskedTransactions = transactions.map(tx => ({
+      ...tx,
+      senderAccount: tx.senderAccount 
+        ? tx.senderAccount.slice(0, 2) + '****' + tx.senderAccount.slice(-2)
+        : 'Ẩn danh'
+    }))
+
     return NextResponse.json({
-      data: transactions,
+      data: maskedTransactions,
       pagination: {
         page,
         limit,
